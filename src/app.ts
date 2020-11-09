@@ -1,9 +1,8 @@
 import express from 'express';
+import routes from './routes';
 
 const app = express();
 
-app.use('/', (req, res) => {
-  return res.json('Hello from Food Order Server!');
-})
+app.use('/api/v1', routes);
 
 export default app;
