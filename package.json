@@ -1,0 +1,11 @@
+{
+  "name": "food-delivery-server",
+  "version": "1.0.0",
+  "description": "Food delivery backend",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.ts"
+  },
+  "author": "Marc",
+  "license": "MIT"
+}
