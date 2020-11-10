@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Merchant } from '../models/Merchant';
 import { generatePasswordHash } from '../helpers/auth';
+import { ICreateMerchantInput } from '../interfaces/IMerchant';
 
 export const createMerchant = async (req: Request, res: Response) => {
   const {
@@ -11,7 +12,7 @@ export const createMerchant = async (req: Request, res: Response) => {
     email,
     password,
     owner
-  } = req.body;
+  }: ICreateMerchantInput = req.body;
 
   try {
     const existingMerchant = await Merchant.findOne({ email });

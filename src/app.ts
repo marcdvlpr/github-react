@@ -1,15 +1,16 @@
 import 'dotenv/config';
-import express from 'express';
+import express, { Application } from 'express';
 import logger from 'morgan';
 import routes from './routes';
 
-const app = express();
+const app: Application = express();
 
 if (process.env.NODE_ENV === 'development') {
   app.use(logger('dev'));
 }
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 
 app.use('/api/v1', routes);
 

@@ -1,16 +1,16 @@
 import mongoose, { Schema, Document, model } from 'mongoose';
 
-interface IMerchant extends Document {
+interface IMerchantModel extends Document {
   name: string;
-  foodType?: string[];
-  address?: string;
+  foodType: string[];
+  address: string;
   phone: string;
   email: string;
   password: string;
   owner: string;
-  serviceAvailable?: boolean;
-  coverImages?: string[];
-  rating?: number;
+  serviceAvailable: boolean;
+  coverImages: string[];
+  rating: number;
   foods: any;
 }
 
@@ -71,4 +71,4 @@ const merchantSchema = new Schema(
   }
 );
 
-export const Merchant = model<IMerchant>('Merchant', merchantSchema);
+export const Merchant = model<IMerchantModel>('Merchant', merchantSchema);
