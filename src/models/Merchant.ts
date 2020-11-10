@@ -38,8 +38,7 @@ const merchantSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
-      minlength: 10
+      required: true
     },
     owner: {
       type: String,

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Merchant } from '../models/Merchant';
+import { generatePasswordHash } from '../helpers/auth';
 
 export const createMerchant = async (req: Request, res: Response) => {
   const {
@@ -16,8 +17,10 @@ export const createMerchant = async (req: Request, res: Response) => {
     const existingMerchant = await Merchant.findOne({ email });
 
     if (existingMerchant) {
-      return res.json({ message: 'Merchant already exists'})
+      return res.status(400).json({ message: 'Merchant already exists'})
     };
+
+    const hashPassword = await generatePasswordHash(password);
 
     const newMerchant = await Merchant.create({
       name,
@@ -25,7 +28,7 @@ export const createMerchant = async (req: Request, res: Response) => {
       address,
       phone,
       email,
-      password,
+      password: hashPassword,
       owner,
       serviceAvailable: false,
       coverImages: [],
@@ -33,7 +36,7 @@ export const createMerchant = async (req: Request, res: Response) => {
     });
 
 
-    res.json(newMerchant);
+    res.status(201).json(newMerchant);
   } catch (error) {
     console.error(error);
     res.status(500).send('Server Error');
