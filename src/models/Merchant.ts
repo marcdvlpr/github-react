@@ -58,7 +58,17 @@ const merchantSchema = new Schema(
       ref: 'Food'
     }],
   },
-  { timestamps: true }
+  {
+    toJSON: {
+      transform: (doc, ret) => {
+        delete ret.password;
+        delete ret.__v;
+        delete ret.createdAt;
+        delete ret.updatedAt;
+      }
+    },
+    timestamps: true
+  }
 );
 
 export const Merchant = model<IMerchant>('Merchant', merchantSchema);
