@@ -1,4 +1,6 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../config';
 
 export const generatePasswordHash = async (password: string) => {
   const salt = await bcrypt.genSalt(10);
@@ -6,5 +8,9 @@ export const generatePasswordHash = async (password: string) => {
 };
 
 export const validatePassword = async (password: string, passwordHash: string) => {
-  return bcrypt.compare(password, passwordHash);
+  return await bcrypt.compare(password, passwordHash);
+};
+
+export const generateToken = async (payload: Object) => {
+  return jwt.sign(payload, JWT_SECRET as string, { expiresIn: '24h' })
 };
