@@ -7,3 +7,9 @@ export interface ICreateMerchantInput {
   password: string;
   owner: string;
 }
+
+export interface IMerchantPayload {
+  _id: string;
+  email: string;
+  name: string;
+}
