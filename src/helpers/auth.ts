@@ -14,23 +14,21 @@ export const validatePassword = async (password: string, passwordHash: string) =
 };
 
 export const generateToken = (payload: AuthPayload) => {
-  const secret = JWT_SECRET as string;
   const signOptions: SignOptions = {
     algorithm: 'HS256',
     expiresIn: TOKEN_LIFE,
   };
-  return jwt.sign(payload, secret, signOptions);
+  return jwt.sign(payload, JWT_SECRET, signOptions);
 };
 
 export const verifyToken = (req: Request) => {
-  const secret = JWT_SECRET as string;
   const token = req.get('Authorization');
 
   if (!token) {
     return false;
   }
 
-  const decoded = jwt.verify(token.split(' ')[1], secret) as AuthPayload;
+  const decoded = jwt.verify(token.split(' ')[1], JWT_SECRET) as AuthPayload;
 
   req.user = decoded;
   return true;
