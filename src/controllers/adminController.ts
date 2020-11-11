@@ -43,3 +43,18 @@ export const createMerchant = async (req: Request, res: Response) => {
     res.status(500).send('Server Error');
   }
 };
+
+export const getMerchants = async (req: Request, res: Response) => {
+  try {
+    const merchants = await Merchant.find();
+
+    if (merchants === null) {
+      return res.status(404).json({ message: 'Merchants data not available' });
+    }
+
+    res.status(200).json(merchants);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+};

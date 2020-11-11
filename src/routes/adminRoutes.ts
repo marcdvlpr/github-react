@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express';
-import { createMerchant } from '../controllers/adminController';
+import { createMerchant, getMerchants } from '../controllers/adminController';
 
 const router = express.Router();
 
-router.post('/vendor', createMerchant);
+router.post('/merchant', createMerchant);
+router.get('/merchants', getMerchants);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Admin' });
