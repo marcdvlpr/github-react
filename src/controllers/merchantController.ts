@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Merchant } from '../models/Merchant';
-import { validatePassword } from '../helpers/auth';
+import { validatePassword, generateToken } from '../helpers/auth';
 
 export const merchantLogin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -18,7 +18,15 @@ export const merchantLogin = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Incorrect email or password' });
     }
 
-    res.json({ merchant });
+    const payload = {
+      _id: merchant._id,
+      email: merchant.email,
+      name: merchant.name
+    }
+
+    const token = generateToken(payload);
+
+    res.json({ token });
   } catch (error) {
     console.error(error);
   }
