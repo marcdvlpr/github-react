@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import bcrypt from 'bcrypt';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { IMerchantPayload } from '../interfaces/IMerchant';
@@ -19,4 +20,18 @@ export const generateToken = (payload: IMerchantPayload) => {
     expiresIn: TOKEN_LIFE,
   };
   return jwt.sign(payload, secret, signOptions);
+};
+
+export const verifyToken = (req: Request) => {
+  const secret = JWT_SECRET as string;
+  const token = req.get('Authorization');
+
+  if (!token) {
+    return false;
+  }
+
+  const decoded = jwt.verify(token.split(' ')[1], secret) as IMerchantPayload;
+
+  req.user = decoded;
+  return true;
 };
