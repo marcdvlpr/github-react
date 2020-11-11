@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { IMerchantPayload } from '../interfaces/IMerchant';
-import { JWT_SECRET } from '../config';
+import { JWT_SECRET, TOKEN_LIFE } from '../config';
 
 export const generatePasswordHash = async (password: string) => {
   const salt = await bcrypt.genSalt(10);
@@ -13,5 +13,10 @@ export const validatePassword = async (password: string, passwordHash: string) =
 };
 
 export const generateToken = (payload: IMerchantPayload) => {
-  return jwt.sign(payload, JWT_SECRET as string, { expiresIn: '24h' });
+  const secret = JWT_SECRET as string;
+  const signOptions: SignOptions = {
+    algorithm: 'HS256',
+    expiresIn: TOKEN_LIFE,
+  };
+  return jwt.sign(payload, secret, signOptions);
 };
