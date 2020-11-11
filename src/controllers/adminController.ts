@@ -58,3 +58,22 @@ export const getMerchants = async (req: Request, res: Response) => {
     res.status(500).send('Server Error');
   }
 };
+
+export const getMerchantByID = async (req: Request, res: Response) => {
+  const merchantID = req.params.id;
+
+  try {
+    const merchant = await Merchant.findById(merchantID);
+
+    if (merchant === null) {
+      return res.status(404).json({ message: 'Merchant data not found' });
+    }
+
+    res.status(200).json(merchant);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+    res.status(500).send('Server Error');
+  }
+};
