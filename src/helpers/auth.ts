@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import bcrypt from 'bcrypt';
 import jwt, { SignOptions } from 'jsonwebtoken';
-import { IMerchantPayload } from '../interfaces/IMerchant';
+import { AuthPayload } from '../interfaces/IAuth';
 import { JWT_SECRET, TOKEN_LIFE } from '../config';
 
 export const generatePasswordHash = async (password: string) => {
@@ -13,7 +13,7 @@ export const validatePassword = async (password: string, passwordHash: string) =
   return await bcrypt.compare(password, passwordHash);
 };
 
-export const generateToken = (payload: IMerchantPayload) => {
+export const generateToken = (payload: AuthPayload) => {
   const secret = JWT_SECRET as string;
   const signOptions: SignOptions = {
     algorithm: 'HS256',
@@ -30,7 +30,7 @@ export const verifyToken = (req: Request) => {
     return false;
   }
 
-  const decoded = jwt.verify(token.split(' ')[1], secret) as IMerchantPayload;
+  const decoded = jwt.verify(token.split(' ')[1], secret) as AuthPayload;
 
   req.user = decoded;
   return true;
