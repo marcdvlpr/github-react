@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Merchant } from '../models/Merchant';
+import { validatePassword } from '../helpers/auth';
 
 export const merchantLogin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -11,7 +12,7 @@ export const merchantLogin = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Incorrect email or password' });
     }
 
-    const isMatch = false;
+    const isMatch = await validatePassword(password, merchant.password);
 
     if (!isMatch) {
       return res.status(401).json({ message: 'Incorrect email or password' });
