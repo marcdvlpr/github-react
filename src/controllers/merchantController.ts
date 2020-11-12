@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import { Merchant } from '../models/Merchant';
 import { validatePassword, generateToken } from '../helpers/auth';
+import { IMerchantLoginInput, IEditMerchantInput } from '../interfaces/IMerchant';
 
 export const merchantLogin = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password } = <IMerchantLoginInput>req.body;
 
   try {
     const merchant = await Merchant.findOne({ email }).select('+password');
@@ -43,9 +44,9 @@ export const getMerchantProfile = async (req: Request, res: Response) => {
 };
 
 export const updateMerchantProfile = async (req: Request, res: Response) => {
-  const { name, foodType, address, phone } = req.body;
+  const { name, foodType, address, phone } = <IEditMerchantInput>req.body;
 
-  const merchantField = { name, foodType, address, phone };
+  const merchantField = {} as IEditMerchantInput;
 
   if (name) merchantField.name = name;
   if (foodType) merchantField.foodType = foodType;

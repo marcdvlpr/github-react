@@ -13,3 +13,15 @@ export interface IMerchantPayload {
   email: string;
   name: string;
 }
+
+export interface IMerchantLoginInput {
+  email: string;
+  password: string;
+}
+
+export interface IEditMerchantInput {
+  name: string;
+  foodType: string[];
+  address: string;
+  phone: string;
+}
