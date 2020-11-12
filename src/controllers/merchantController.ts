@@ -117,3 +117,17 @@ export const addFoodItem = async (req: Request, res: Response) => {
     console.error(error);
   }
 };
+
+export const getFoods = async (req: Request, res: Response) => {
+  try {
+    const foods = await Food.find({ merchantId: req.user?._id });
+
+    if (foods.length === 0) {
+      return res.status(404).json({ message: 'Foods not found!' });
+    }
+
+    return res.status(200).json(foods);
+  } catch (error) {
+    console.error(error);
+  }
+};
