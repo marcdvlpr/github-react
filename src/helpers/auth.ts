@@ -24,9 +24,7 @@ export const generateToken = (payload: AuthPayload) => {
 export const verifyToken = (req: Request) => {
   const token = req.get('Authorization');
 
-  if (!token) {
-    return false;
-  }
+  if (!token) return false;
 
   const decoded = jwt.verify(token.split(' ')[1], JWT_SECRET) as AuthPayload;
 
