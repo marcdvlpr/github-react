@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { Merchant } from '../models/Merchant';
+import { Food } from '../models/Food';
 import { validatePassword, generateToken } from '../helpers/auth';
 import { IMerchantLoginInput, IEditMerchantInput } from '../interfaces/IMerchant';
-import { Food } from '../models/Food';
+import { ICreateFoodItemInput } from '../interfaces/IFood';
 
 export const merchantLogin = async (req: Request, res: Response) => {
   const { email, password } = <IMerchantLoginInput>req.body;
@@ -86,7 +87,7 @@ export const updateMerchantService = async (req: Request, res: Response) => {
 };
 
 export const addFoodItem = async (req: Request, res: Response) => {
-  const { name, description, category, foodType, readyTime, price } = req.body;
+  const { name, description, category, foodType, readyTime, price } = <ICreateFoodItemInput>req.body;
 
   try {
     const merchant = await Merchant.findById(req.user?._id);
