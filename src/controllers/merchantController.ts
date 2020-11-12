@@ -41,3 +41,26 @@ export const getMerchantProfile = async (req: Request, res: Response) => {
     console.error(error);
   }
 };
+
+export const updateMerchantProfile = async (req: Request, res: Response) => {
+  const { name, foodType, address, phone } = req.body;
+
+  const merchantField = { name, foodType, address, phone };
+
+  if (name) merchantField.name = name;
+  if (foodType) merchantField.foodType = foodType;
+  if (address) merchantField.address = address;
+  if (phone) merchantField.phone = phone;
+
+  try {
+    const updateMerchant = await Merchant.findByIdAndUpdate(
+      req.user?._id,
+      { $set: merchantField },
+      { new: true, upsert: true }
+    );
+
+    return res.status(200).json(updateMerchant);
+  } catch (error) {
+    console.error(error);
+  }
+};
