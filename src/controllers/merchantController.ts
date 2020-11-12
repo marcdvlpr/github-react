@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Merchant } from '../models/Merchant';
 import { validatePassword, generateToken } from '../helpers/auth';
 import { IMerchantLoginInput, IEditMerchantInput } from '../interfaces/IMerchant';
+import { Food } from '../models/Food';
 
 export const merchantLogin = async (req: Request, res: Response) => {
   const { email, password } = <IMerchantLoginInput>req.body;
@@ -79,6 +80,38 @@ export const updateMerchantService = async (req: Request, res: Response) => {
 
 
     return res.status(400).json({ message: 'Unable to update merchant profile' })
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addFoodItem = async (req: Request, res: Response) => {
+  const { name, description, category, foodType, readyTime, price } = req.body;
+
+  try {
+    const merchant = await Merchant.findById(req.user?._id);
+
+    if (merchant !== null) {
+      const foodItem = await Food.create({
+        merchantId: merchant._id,
+        name,
+        description,
+        category,
+        foodType,
+        readyTime,
+        price,
+        rating: 0,
+        images: []
+      })
+
+      merchant.foods.push(foodItem);
+
+      const merchantProfile = await merchant.save();
+
+      return res.status(201).json(merchantProfile);
+    }
+
+    return res.status(400).json({ message: 'Unable to update merchant profile'});
   } catch (error) {
     console.error(error);
   }
