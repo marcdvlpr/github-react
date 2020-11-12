@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { AuthPayload } from '../interfaces/IAuth';
@@ -21,13 +21,17 @@ export const generateToken = (payload: AuthPayload) => {
   return jwt.sign(payload, JWT_SECRET, signOptions);
 };
 
-export const verifyToken = (req: Request) => {
-  const token = req.get('Authorization');
+export const verifyToken = (req: Request, res: Response) => {
+  try {
+    const token = req.get('Authorization');
 
-  if (!token) return false;
+    if (!token) return false;
 
-  const decoded = jwt.verify(token.split(' ')[1], JWT_SECRET) as AuthPayload;
+    const decoded = jwt.verify(token.split(' ')[1], JWT_SECRET) as AuthPayload;
 
-  req.user = decoded;
-  return true;
+    req.user = decoded;
+    return true;
+  } catch (error) {
+    res.status(401).json({ msg: 'Token is not valid' });
+  }
 };

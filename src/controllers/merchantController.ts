@@ -31,3 +31,13 @@ export const merchantLogin = async (req: Request, res: Response) => {
     console.error(error);
   }
 };
+
+export const getMerchantProfile = async (req: Request, res: Response) => {
+  try {
+    const merchant = await Merchant.findById(req.user?._id);
+
+    return res.json(merchant);
+  } catch (error) {
+    console.error(error);
+  }
+};
