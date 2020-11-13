@@ -68,6 +68,27 @@ export const updateMerchantProfile = async (req: Request, res: Response) => {
   }
 };
 
+export const updateMerchantCoverImage = async (req: Request, res: Response) => {
+  try {
+    const merchant = await Merchant.findById(req.user?._id);
+
+    if (merchant !== null) {
+      const files = req.files as Express.Multer.File[];
+      const images = files.map((file: Express.Multer.File) => file.filename);
+
+      merchant.coverImages.push(...images);
+
+      const saveResult = await merchant.save();
+
+      return res.status(200).json(saveResult);
+    }
+
+    return res.status(400).json({ message: 'Unable to update merchant profile' });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const updateMerchantService = async (req: Request, res: Response) => {
   try {
     const merchant = await Merchant.findById(req.user?._id);

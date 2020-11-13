@@ -6,7 +6,8 @@ import {
   updateMerchantProfile,
   updateMerchantService,
   addFoodItem,
-  getFoods
+  getFoods,
+  updateMerchantCoverImage
 } from '../controllers/merchantController';
 import { uploadImage } from '../middleware/upload';
 
@@ -16,6 +17,7 @@ router.post('/login', merchantLogin);
 
 router.get('/profile', Authenticate, getMerchantProfile);
 router.patch('/profile', Authenticate, updateMerchantProfile);
+router.patch('/coverimage', Authenticate, uploadImage.array('images', 10), updateMerchantCoverImage);
 router.patch('/service', Authenticate, updateMerchantService);
 
 router.post('/food', Authenticate, uploadImage.array('images', 10), addFoodItem);
