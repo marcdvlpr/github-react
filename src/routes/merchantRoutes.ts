@@ -8,6 +8,7 @@ import {
   addFoodItem,
   getFoods
 } from '../controllers/merchantController';
+import { uploadImage } from '../middleware/upload';
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router.get('/profile', Authenticate, getMerchantProfile);
 router.patch('/profile', Authenticate, updateMerchantProfile);
 router.patch('/service', Authenticate, updateMerchantService);
 
-router.post('/food', Authenticate, addFoodItem);
+router.post('/food', Authenticate, uploadImage.array('images', 10), addFoodItem);
 router.get('/food', Authenticate, getFoods);
 
 router.get('/', (req: Request, res: Response) => {

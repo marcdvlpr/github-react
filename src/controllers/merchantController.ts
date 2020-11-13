@@ -93,6 +93,9 @@ export const addFoodItem = async (req: Request, res: Response) => {
     const merchant = await Merchant.findById(req.user?._id);
 
     if (merchant !== null) {
+      const files = req.files as [Express.Multer.File];
+      const images = files.map((file: Express.Multer.File) => file.filename);
+
       const foodItem = await Food.create({
         merchantId: merchant._id,
         name,
@@ -102,7 +105,7 @@ export const addFoodItem = async (req: Request, res: Response) => {
         readyTime,
         price,
         rating: 0,
-        images: []
+        images
       })
 
       merchant.foods.push(foodItem);
