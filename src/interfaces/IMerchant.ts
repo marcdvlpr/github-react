@@ -2,6 +2,7 @@ export interface ICreateMerchantInput {
   name: string;
   foodType: string[];
   address: string;
+  zipCode: string;
   phone: string;
   email: string;
   password: string;
