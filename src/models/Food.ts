@@ -1,6 +1,6 @@
 import { Schema, Document, model } from 'mongoose';
 
-interface IFoodModel extends Document {
+export interface IFoodModel extends Document {
   merchantId: string;
   name: string;
   description: string;
