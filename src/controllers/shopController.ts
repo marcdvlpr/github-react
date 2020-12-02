@@ -71,19 +71,35 @@ export const searchFoods = async (req: Request, res: Response) => {
   const zipCode = req.params.zipCode;
 
   try {
-    const restaurant = await Merchant
+    const restaurants = await Merchant
       .find({ zipCode, serviceAvailable: true })
       .populate('foods');
 
-    if (restaurant.length === 0) {
+    if (restaurants.length === 0) {
       return res.status(404).json({ message: 'Data not found!' });
     }
 
     let foodResult: any = [];
 
-    restaurant.map(item => foodResult.push(...item.foods));
+    restaurants.map(item => foodResult.push(...item.foods));
 
     return res.status(200).json(foodResult);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getRestaurantById = async (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  try {
+    const restaurant = await Merchant.findById(id).populate('foods');
+
+    if (!restaurant) {
+      return res.status(404).json({ message: 'Data not found!' });
+    }
+
+    return res.status(200).json(restaurant);
   } catch (error) {
     console.log(error);
   }
