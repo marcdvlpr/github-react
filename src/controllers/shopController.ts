@@ -66,3 +66,25 @@ export const getFoodsIn30Min = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+export const searchFoods = async (req: Request, res: Response) => {
+  const zipCode = req.params.zipCode;
+
+  try {
+    const restaurant = await Merchant
+      .find({ zipCode, serviceAvailable: true })
+      .populate('foods');
+
+    if (restaurant.length === 0) {
+      return res.status(404).json({ message: 'Data not found!' });
+    }
+
+    let foodResult: any = [];
+
+    restaurant.map(item => foodResult.push(...item.foods));
+
+    return res.status(200).json(foodResult);
+  } catch (error) {
+    console.log(error);
+  }
+};
