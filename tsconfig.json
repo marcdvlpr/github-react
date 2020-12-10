@@ -9,6 +9,8 @@
     "outDir": "./dist",
     "esModuleInterop": true,
     "strict": true,
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
     "typeRoots": ["./node_module/@types", "./src/types"]
   },
   "exclude": ["./node_modules"],
