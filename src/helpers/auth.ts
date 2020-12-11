@@ -35,3 +35,11 @@ export const verifyToken = (req: Request, res: Response) => {
     res.status(401).json({ msg: 'Token is not valid' });
   }
 };
+
+export const generateOtp = () => {
+  const otp = Math.floor(10000 + Math.random() * 900000);
+  const otpExpiry = new Date();
+  otpExpiry.setTime(new Date().getTime() + (30 * 60 * 1000));
+
+  return { otp, otpExpiry };
+};

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { CreateCustomerInput } from '../validators/customer';
-import { generatePasswordHash } from '../helpers/auth';
+import { generatePasswordHash, generateOtp } from '../helpers/auth';
 import { Customer } from '../models/Customer';
 
 export const customerRegister = async (req: Request, res: Response) => {
@@ -19,8 +19,7 @@ export const customerRegister = async (req: Request, res: Response) => {
 
     const hashPassword = await generatePasswordHash(password);
 
-    const otp = 494949;
-    const otpExpiry = new Date();
+    const { otp, otpExpiry } = generateOtp();
 
     const newUser = await Customer.create({
       email,
