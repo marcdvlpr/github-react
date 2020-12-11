@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { CreateCustomerInput } from '../validators/customer';
-import { generatePasswordHash, generateOtp } from '../helpers/auth';
 import { Customer } from '../models/Customer';
+import { CreateCustomerInput } from '../validators/customer';
+import { generatePasswordHash, generateOtp, requestOtp, generateToken } from '../helpers/auth';
 
 export const customerRegister = async (req: Request, res: Response) => {
   try {
@@ -21,7 +21,7 @@ export const customerRegister = async (req: Request, res: Response) => {
 
     const { otp, otpExpiry } = generateOtp();
 
-    const newUser = await Customer.create({
+    const user = await Customer.create({
       email,
       phone,
       password: hashPassword,
@@ -35,11 +35,19 @@ export const customerRegister = async (req: Request, res: Response) => {
       longitude: 0
     });
 
-    if (!newUser) {
+    if (!user) {
       return res.status(400).json({ message: 'Error while creating user' });
     }
 
-    res.status(201).send();
+    await requestOtp(otp, phone);
+
+    const token = generateToken({
+      _id: user._id,
+      email: user.email,
+      verified: user.verified
+    });
+
+    return res.status(201).json({ email: user.email, verified: user.verified, token });
   } catch (error) {
     console.log(error);
   }
