@@ -61,7 +61,7 @@ export const requestOtp = async (otp: number, phoneNumber: string) => {
 
       const response = await client.messages.create({
         from: TWILIO_PHONE_NUMBER,
-        to: phoneNumber,
+        to: `+33${phoneNumber}`,
         body: `Your OTP verification code is: ${otp}`
       });
 

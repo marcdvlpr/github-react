@@ -19,7 +19,7 @@ export const createMerchant = async (req: Request, res: Response) => {
     const existingMerchant = await Merchant.findOne({ email });
 
     if (existingMerchant) {
-      return res.status(400).json({ message: 'Merchant already exists'})
+      return res.status(400).json({ message: 'Merchant already exists!'})
     };
 
     const hashPassword = await generatePasswordHash(password);
@@ -67,7 +67,7 @@ export const getMerchantByID = async (req: Request, res: Response) => {
     const merchant = await Merchant.findById(merchantID);
 
     if (merchant === null) {
-      return res.status(404).json({ message: 'Merchant data not found' });
+      return res.status(404).json({ message: 'Merchant data not found!' });
     }
 
     res.status(200).json(merchant);
