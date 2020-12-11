@@ -9,6 +9,6 @@ const router = express.Router();
 router.use('/admin', adminRouter);
 router.use('/merchant', merchantRouter);
 router.use('/shop', shopRouter);
-router.use('/customer', customerRouter);
+router.use('/user', customerRouter);
 
 export default router;

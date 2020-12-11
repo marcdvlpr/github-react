@@ -9,7 +9,7 @@ interface ICustomerModel extends Document {
   phone: string;
   verified: boolean;
   otp: number;
-  otpExpiry: number;
+  otpExpiry: Date;
   latitude: number;
   longitude: number;
 }

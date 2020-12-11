@@ -38,7 +38,6 @@ export const createMerchant = async (req: Request, res: Response) => {
       rating: 0
     });
 
-
     res.status(201).json(newMerchant);
   } catch (error) {
     console.error(error);
