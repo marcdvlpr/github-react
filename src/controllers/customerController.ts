@@ -133,3 +133,30 @@ export const customerVerify = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+export const customerRequestOtp = async (req: Request, res: Response) => {
+  try {
+    const customer = req.user;
+
+    if (!customer) {
+      return res.status(400).json({ message: 'You are not logged in!' });
+    }
+
+    const user = await Customer.findById(customer._id);
+
+    if (!user) {
+      return res.status(400).json({ message: 'User does not exist!' });
+    }
+
+    const { otp, otpExpiry } = generateOtp();
+    user.otp = otp;
+    user.otpExpiry = otpExpiry;
+
+    await user.save();
+    await requestOtp(otp, user.phone);
+
+    return res.status(200).json({ message: 'OTP sent to your mobile number!' });
+  } catch (error) {
+    console.log(error);
+  }
+};
