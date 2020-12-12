@@ -10,3 +10,11 @@ export class CreateCustomerInput {
   @Length(8, 40)
   password: string;
 }
+
+export class customerLoginInput {
+  @IsEmail()
+  email: string;
+
+  @Length(8, 40)
+  password: string;
+}
