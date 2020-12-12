@@ -58,3 +58,36 @@ export const customerRegister = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+export const customerVerify = async (req: Request, res: Response) => {
+  try {
+    const { otp } = req.body;
+    const customer = req.user;
+
+    if (!customer) {
+      return res.status(400).json({ message: 'Unable to verify user' });
+    }
+
+    const user = await Customer.findById(customer._id);
+
+    if (user && user.otp === parseInt(otp) && user.otpExpiry >= new Date()) {
+      user.verified = true;
+
+      const updateUser = await user.save();
+
+      const token = generateToken({
+        _id: updateUser._id,
+        email: updateUser.email,
+        verified: updateUser.verified
+      });
+
+      return res.status(200).json({
+        email: updateUser.email,
+        verified: updateUser.verified,
+        token
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
