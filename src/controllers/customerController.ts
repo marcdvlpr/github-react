@@ -107,10 +107,14 @@ export const customerVerify = async (req: Request, res: Response) => {
     const customer = req.user;
 
     if (!customer) {
-      return res.status(400).json({ message: 'Unable to verify user' });
+      return res.status(400).json({ message: 'You are not logged in!' });
     }
 
     const user = await Customer.findById(customer._id);
+
+    if (user && user.otpExpiry <= new Date()) {
+      return res.status(400).json({ message: 'You need to request a new OTP!' });
+    }
 
     if (user && user.otp === parseInt(otp) && user.otpExpiry >= new Date()) {
       user.verified = true;
