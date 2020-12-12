@@ -2,24 +2,30 @@ import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Customer } from '../models/Customer';
-import { CreateCustomerInput } from '../validators/customer';
-import { generatePasswordHash, generateOtp, requestOtp, generateToken } from '../helpers/auth';
+import { customerRegisterInput, customerLoginInput } from '../validators/customer';
+import {
+  generatePasswordHash,
+  validatePassword,
+  generateOtp,
+  requestOtp,
+  generateToken
+} from '../helpers/auth';
 
 export const customerRegister = async (req: Request, res: Response) => {
   try {
-    const customerInputs = plainToClass(CreateCustomerInput, req.body);
+    const customerInputs = plainToClass(customerRegisterInput, req.body);
 
-    const inputErrors = await validate(customerInputs, { validationError: { target: true } });
+    const validationError = await validate(customerInputs, { validationError: { target: true } });
 
-    if (inputErrors.length > 0) {
-      return res.status(400).json(inputErrors);
+    if (validationError.length > 0) {
+      return res.status(400).json(validationError);
     }
 
     const { email, phone, password } = customerInputs;
 
-    const existingCustomer = await Customer.findOne({ email });
+    const customer = await Customer.findOne({ email });
 
-    if (existingCustomer) {
+    if (customer) {
       return res.status(400).json({ message: 'User already exists!' });
     }
 
@@ -54,6 +60,42 @@ export const customerRegister = async (req: Request, res: Response) => {
     });
 
     return res.status(201).json({ email: user.email, verified: user.verified, token });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const customerLogin = async (req: Request, res: Response) => {
+  try {
+    const customerInputs = plainToClass(customerLoginInput, req.body);
+
+    const validationError = await validate(customerInputs, { validationError: { target: true } });
+
+    if (validationError.length > 0) {
+      return res.status(400).json(validationError);
+    }
+
+    const { email, password } = customerInputs;
+
+    const customer = await Customer.findOne({ email }).select('+password');
+
+    if (!customer) {
+      return res.status(401).json({ message: 'Incorrect email or password' });
+    }
+
+    const isMatch = await validatePassword(password, customer.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Incorrect email or password' });
+    }
+
+    const token = generateToken({
+      _id: customer._id,
+      email: customer.email,
+      verified: customer.verified
+    });
+
+    return res.status(200).json({ email: customer.email, verified: customer.verified, token });
   } catch (error) {
     console.log(error);
   }

@@ -1,10 +1,15 @@
 import express, { Request, Response } from 'express';
-import { customerRegister, customerVerify } from '../controllers/customerController';
+import {
+  customerRegister,
+  customerLogin,
+  customerVerify
+} from '../controllers/customerController';
 import { Authenticate } from '../middleware/auth';
 
 const router = express.Router();
 
 router.post('/register', customerRegister);
+router.post('/login', customerLogin);
 
 router.patch('/verify', Authenticate, customerVerify);
 
