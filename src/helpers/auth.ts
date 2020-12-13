@@ -39,7 +39,7 @@ export const verifyToken = (req: Request, res: Response) => {
     req.user = decoded;
     return true;
   } catch (error) {
-    res.status(401).json({ msg: 'Token is not valid' });
+    res.status(401).json({ message: 'Token is not valid' });
   }
 };
 

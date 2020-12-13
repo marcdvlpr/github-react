@@ -164,3 +164,19 @@ export const customerRequestOtp = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+export const getCustomerProfile = async (req: Request, res: Response) => {
+  try {
+    const customer = req.user;
+
+    if (!customer) {
+      return res.status(404).json({ message: 'You are not logged in!' });
+    }
+
+    const profile = await Customer.findById(customer._id);
+
+    return res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+  }
+};

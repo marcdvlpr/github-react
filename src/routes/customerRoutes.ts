@@ -3,7 +3,8 @@ import {
   customerRegister,
   customerLogin,
   customerVerify,
-  customerRequestOtp
+  customerRequestOtp,
+  getCustomerProfile
 } from '../controllers/customerController';
 import { Authenticate } from '../middleware/auth';
 
@@ -14,6 +15,8 @@ router.post('/login', customerLogin);
 
 router.patch('/verify', Authenticate, customerVerify);
 router.get('/otp', Authenticate, customerRequestOtp);
+
+router.get('/profile', Authenticate, getCustomerProfile);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Customer' });
