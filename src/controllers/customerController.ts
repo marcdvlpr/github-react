@@ -175,6 +175,37 @@ export const getCustomerProfile = async (req: Request, res: Response) => {
 
     const profile = await Customer.findById(customer._id);
 
+    if (!profile) {
+      return res.status(400).json({ message: 'User does not exist!' });
+    }
+
+    return res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const editCustomerProfile = async (req: Request, res: Response) => {
+  try {
+    const customer = req.user;
+    const { firstName, lastName, address } = req.body;
+
+    if (!customer) {
+      return res.status(404).json({ message: 'You are not logged in!' });
+    }
+
+    const profile = await Customer.findById(customer._id);
+
+    if (!profile) {
+      return res.status(400).json({ message: 'User does not exist!' });
+    }
+
+    profile.firstName = firstName;
+    profile.lastName = lastName;
+    profile.address = address;
+
+    await profile.save();
+
     return res.status(200).json(profile);
   } catch (error) {
     console.log(error);
