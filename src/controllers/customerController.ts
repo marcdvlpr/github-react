@@ -3,6 +3,7 @@ import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Customer } from '../models/Customer';
 import { customerRegisterInput, customerLoginInput } from '../validators/customer';
+import { IEditCustomerProfileInput } from '../interfaces/ICustomer';
 import {
   generatePasswordHash,
   validatePassword,
@@ -188,7 +189,7 @@ export const getCustomerProfile = async (req: Request, res: Response) => {
 export const editCustomerProfile = async (req: Request, res: Response) => {
   try {
     const customer = req.user;
-    const { firstName, lastName, address } = req.body;
+    const { firstName, lastName, address }: IEditCustomerProfileInput = req.body;
 
     if (!customer) {
       return res.status(404).json({ message: 'You are not logged in!' });
