@@ -46,7 +46,8 @@ export const customerRegister = async (req: Request, res: Response) => {
       address: '',
       verified: false,
       latitude: 0,
-      longitude: 0
+      longitude: 0,
+      orders: []
     });
 
     if (!user) {
