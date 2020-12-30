@@ -9,3 +9,8 @@ export interface ICustomerPayload {
   email: string;
   verified: boolean;
 }
+
+export interface ICartItem {
+  _id: string;
+  unit: number;
+}
