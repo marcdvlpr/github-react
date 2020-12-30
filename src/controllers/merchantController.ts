@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Merchant } from '../models/Merchant';
-import { Food } from '../models/Food';
+import { Food } from '../models';
 import { validatePassword, generateToken } from '../helpers/auth';
 import { IMerchantLoginInput, IEditMerchantInput } from '../interfaces/IMerchant';
 import { ICreateFoodItemInput } from '../interfaces/IFood';

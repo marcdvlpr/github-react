@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { Customer } from '../models/Customer';
-import { Food } from '../models/Food';
+import { Customer, Food } from '../models';
 import { customerRegisterInput, customerLoginInput } from '../validators/customer';
 import { IEditCustomerProfileInput, ICartItem } from '../interfaces/ICustomer';
 import {

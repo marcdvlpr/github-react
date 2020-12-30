@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { Merchant } from '../models/Merchant';
-import { IFoodModel } from '../models/Food';
+import { Merchant, IFoodModel } from '../models';
 
 export const getFoodAvailability = async (req: Request, res: Response) => {
   const zipCode = req.params.zipCode;

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Merchant } from '../models/Merchant';
+import { Merchant } from '../models';
 import { generatePasswordHash } from '../helpers/auth';
 import { ICreateMerchantInput } from '../interfaces/IMerchant';
 
