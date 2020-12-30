@@ -1,6 +1,9 @@
 # Dependency directories
 node_modules/
 
+# Build directory
+dist/
+
 # dotenv environment variables file
 .env
 

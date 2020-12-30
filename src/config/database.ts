@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { DB } from './index';
+import { DB } from './environment';
 
 export const connectDB = async () => {
   const options = {

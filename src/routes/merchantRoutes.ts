@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Authenticate } from '../middleware/auth';
+import { uploadImage } from '../middleware/upload';
 import {
   merchantLogin,
   getMerchantProfile,
@@ -9,7 +10,6 @@ import {
   getFoods,
   updateMerchantCoverImage
 } from '../controllers/merchantController';
-import { uploadImage } from '../middleware/upload';
 
 const router = express.Router();
 
