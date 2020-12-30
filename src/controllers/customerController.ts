@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Customer } from '../models/Customer';
+import { Food } from '../models/Food';
 import { customerRegisterInput, customerLoginInput } from '../validators/customer';
 import { IEditCustomerProfileInput } from '../interfaces/ICustomer';
 import {
@@ -208,6 +209,39 @@ export const editCustomerProfile = async (req: Request, res: Response) => {
     await profile.save();
 
     return res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createOrder = async (req: Request, res: Response) => {
+  try {
+    const customer = req.user;
+
+    if (!customer) {
+      return res.status(404).json({ message: 'You are not logged in!' });
+    }
+
+    const profile = await Customer.findById(customer._id);
+
+    const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
+
+    const cart = req.body;
+
+    let cartItems = Array();
+    let netAmount = 0.0;
+
+    const foods = await Food.find().where('_id').in(cart.map(item => item._id)).exec();
+
+    foods.map(food => {
+      cart.map(({ _id, unit }) => {
+        if (food._id === _id) {
+          netAmount += (food.price * unit);
+          cartItems.push({ food, unit });
+        }
+      })
+    })
+
   } catch (error) {
     console.log(error);
   }
