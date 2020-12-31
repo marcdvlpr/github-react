@@ -289,3 +289,19 @@ export const getOrders = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
+export const getOrderById = async (req: Request, res: Response) => {
+  try {
+    const orderId = req.params.id;
+
+    const order = await Order.findById(orderId).populate('items.food');
+
+    if (!order) {
+      return res.status(400).json({ message: 'Order not found!' });
+    }
+
+    return res.status(200).json(order);
+  } catch (error) {
+    console.log(error);
+  }
+};
