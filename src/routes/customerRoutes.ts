@@ -6,7 +6,8 @@ import {
   customerRequestOtp,
   getCustomerProfile,
   editCustomerProfile,
-  createOrder
+  createOrder,
+  getOrders
 } from '../controllers/customerController';
 import { Authenticate } from '../middleware/auth';
 
@@ -22,6 +23,7 @@ router.get('/profile', Authenticate, getCustomerProfile);
 router.patch('/profile', Authenticate, editCustomerProfile);
 
 router.post('/create-order', Authenticate, createOrder);
+router.get('/orders', Authenticate, getOrders);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Customer' });

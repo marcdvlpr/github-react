@@ -258,13 +258,33 @@ export const createOrder = async (req: Request, res: Response) => {
       })
 
       if (currentOrder) {
-        profile.orders.push(currentOrder);
+        profile.orders?.push(currentOrder);
 
         await profile.save();
 
         return res.status(200).json(currentOrder);
       }
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getOrders = async (req: Request, res: Response) => {
+  try {
+    const customer = req.user;
+
+    if (!customer) {
+      return res.status(404).json({ message: 'You are not logged in!' });
+    }
+
+    const profile = await Customer.findById(customer._id).populate('orders');
+
+    if (!profile || profile?.orders.length <= 0) {
+      return res.status(404).json({ message: 'Orders not found!' });
+    }
+
+    return res.status(200).json(profile.orders);
   } catch (error) {
     console.log(error);
   }
