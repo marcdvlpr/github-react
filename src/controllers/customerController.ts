@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { Customer, Food } from '../models';
+import { Customer, Food, Order } from '../models';
 import { customerRegisterInput, customerLoginInput } from '../validators/customer';
 import { IEditCustomerProfileInput, ICartItem } from '../interfaces/ICustomer';
 import {
@@ -224,6 +224,10 @@ export const createOrder = async (req: Request, res: Response) => {
 
     const profile = await Customer.findById(customer._id);
 
+    if (!profile) {
+      return res.status(400).json({ message: 'User does not exist!' });
+    }
+
     const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
 
     const cart = <ICartItem[]>req.body;
@@ -235,13 +239,32 @@ export const createOrder = async (req: Request, res: Response) => {
 
     foods.map(food => {
       cart.map(({ _id, unit }) => {
-        if (food._id === _id) {
+        if (String(food._id) === _id) {
           netAmount += (food.price * unit);
           cartItems.push({ food, unit });
         }
       })
     })
 
+    if (cartItems) {
+      const currentOrder = await Order.create({
+        orderId,
+        items: cartItems,
+        totalAmount: netAmount,
+        orderDate: new Date(),
+        paidThrough: 'COD',
+        paymentResponse: '',
+        orderStatus: 'Waiting'
+      })
+
+      if (currentOrder) {
+        profile.orders.push(currentOrder);
+
+        await profile.save();
+
+        return res.status(200).json(currentOrder);
+      }
+    }
   } catch (error) {
     console.log(error);
   }
