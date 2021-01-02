@@ -1,4 +1,4 @@
-import { AuthPayload } from '../interfaces/IAuth';
+import { AuthPayload } from '../interfaces';
 
 declare global {
   namespace NodeJS {

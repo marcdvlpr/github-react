@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Customer, Food, Order } from '../models';
 import { customerRegisterInput, customerLoginInput } from '../validators/customer';
-import { IEditCustomerProfileInput, ICartItem } from '../interfaces/ICustomer';
+import { IEditCustomerProfileInput, ICartItem } from '../interfaces';
 import {
   generatePasswordHash,
   validatePassword,
@@ -215,7 +215,8 @@ export const createOrder = async (req: Request, res: Response) => {
 
     const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
 
-    const cart = <ICartItem[]>req.body;
+    // const cart = <ICartItem[]>req.body;
+    const cart: ICartItem[] = req.body;
 
     let cartItems = Array();
     let netAmount = 0.0;

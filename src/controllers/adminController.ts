@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Merchant } from '../models';
 import { generatePasswordHash } from '../helpers/auth';
-import { ICreateMerchantInput } from '../interfaces/IMerchant';
+import { ICreateMerchantInput } from '../interfaces';
 
 export const createMerchant = async (req: Request, res: Response) => {
   try {

@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import { Merchant, Food } from '../models';
 import { validatePassword, generateToken } from '../helpers/auth';
-import { IMerchantLoginInput, IEditMerchantInput } from '../interfaces/IMerchant';
-import { ICreateFoodItemInput } from '../interfaces/IFood';
+import { IMerchantLoginInput, IEditMerchantInput, ICreateFoodItemInput } from '../interfaces';
 
 export const merchantLogin = async (req: Request, res: Response) => {
   try {
-    const { email, password } = <IMerchantLoginInput>req.body;
+    const { email, password }: IMerchantLoginInput = req.body;
     const merchant = await Merchant.findOne({ email }).select('+password');
 
     if (!merchant) {
@@ -49,7 +48,7 @@ export const getMerchantProfile = async (req: Request, res: Response) => {
 export const updateMerchantProfile = async (req: Request, res: Response) => {
   try {
     const user = req.user;
-    const { name, foodType, address, phone } = <IEditMerchantInput>req.body;
+    const { name, foodType, address, phone }: IEditMerchantInput = req.body;
 
     const merchantField = {} as IEditMerchantInput;
 
@@ -117,7 +116,7 @@ export const updateMerchantService = async (req: Request, res: Response) => {
 export const addFoodItem = async (req: Request, res: Response) => {
   try {
     const user = req.user;
-    const { name, description, category, foodType, readyTime, price } = <ICreateFoodItemInput>req.body;
+    const { name, description, category, foodType, readyTime, price }: ICreateFoodItemInput = req.body;
 
     const merchant = await Merchant.findById(user?._id);
 
