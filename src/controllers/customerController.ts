@@ -63,7 +63,8 @@ export const customerRegister = async (req: Request, res: Response) => {
 
     return res.status(201).json({ email: user.email, verified: user.verified, token });
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
@@ -99,107 +100,95 @@ export const customerLogin = async (req: Request, res: Response) => {
 
     return res.status(200).json({ email: customer.email, verified: customer.verified, token });
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
 export const customerVerify = async (req: Request, res: Response) => {
   try {
     const { otp } = req.body;
-    const customer = req.user;
+    const user = req.user;
+
+    const customer = await Customer.findById(user?._id);
 
     if (!customer) {
-      return res.status(400).json({ message: 'You are not logged in!' });
+      return res.status(404).json({ message: 'User does not exist!' });
     }
 
-    const user = await Customer.findById(customer._id);
-
-    if (user && user.otpExpiry <= new Date()) {
-      return res.status(400).json({ message: 'You need to request a new OTP!' });
+    if (customer.otpExpiry <= new Date() || customer.otp !== parseInt(otp)) {
+      return res.status(404).json({ message: 'You need to request a new OTP!' });
     }
 
-    if (user && user.otp === parseInt(otp) && user.otpExpiry >= new Date()) {
-      user.verified = true;
+    customer.verified = true;
 
-      const updateUser = await user.save();
+    const updateUser = await customer.save();
 
-      const token = generateToken({
-        _id: updateUser._id,
-        email: updateUser.email,
-        verified: updateUser.verified
-      });
+    const token = generateToken({
+      _id: updateUser._id,
+      email: updateUser.email,
+      verified: updateUser.verified
+    });
 
-      return res.status(200).json({
-        email: updateUser.email,
-        verified: updateUser.verified,
-        token
-      });
-    }
+    return res.status(200).json({
+      email: updateUser.email,
+      verified: updateUser.verified,
+      token
+    });
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
 export const customerRequestOtp = async (req: Request, res: Response) => {
   try {
-    const customer = req.user;
+    const user = req.user;
+    const customer = await Customer.findById(user?._id);
 
     if (!customer) {
-      return res.status(400).json({ message: 'You are not logged in!' });
-    }
-
-    const user = await Customer.findById(customer._id);
-
-    if (!user) {
-      return res.status(400).json({ message: 'User does not exist!' });
+      return res.status(404).json({ message: 'User does not exist!' });
     }
 
     const { otp, otpExpiry } = generateOtp();
-    user.otp = otp;
-    user.otpExpiry = otpExpiry;
+    customer.otp = otp;
+    customer.otpExpiry = otpExpiry;
 
-    await user.save();
-    await requestOtp(otp, user.phone);
+    await customer.save();
+    await requestOtp(otp, customer.phone);
 
     return res.status(200).json({ message: 'OTP sent to your mobile number!' });
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
 export const getCustomerProfile = async (req: Request, res: Response) => {
   try {
-    const customer = req.user;
-
-    if (!customer) {
-      return res.status(404).json({ message: 'You are not logged in!' });
-    }
-
-    const profile = await Customer.findById(customer._id);
+    const user = req.user;
+    const profile = await Customer.findById(user?._id);
 
     if (!profile) {
-      return res.status(400).json({ message: 'User does not exist!' });
+      return res.status(404).json({ message: 'User does not exist!' });
     }
 
     return res.status(200).json(profile);
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
 export const editCustomerProfile = async (req: Request, res: Response) => {
   try {
-    const customer = req.user;
+    const user = req.user;
     const { firstName, lastName, address }: IEditCustomerProfileInput = req.body;
 
-    if (!customer) {
-      return res.status(404).json({ message: 'You are not logged in!' });
-    }
-
-    const profile = await Customer.findById(customer._id);
+    const profile = await Customer.findById(user?._id);
 
     if (!profile) {
-      return res.status(400).json({ message: 'User does not exist!' });
+      return res.status(404).json({ message: 'User does not exist!' });
     }
 
     profile.firstName = firstName;
@@ -210,22 +199,18 @@ export const editCustomerProfile = async (req: Request, res: Response) => {
 
     return res.status(200).json(profile);
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
-    const customer = req.user;
+    const user = req.user;
+    const customer = await Customer.findById(user?._id);
 
     if (!customer) {
-      return res.status(404).json({ message: 'You are not logged in!' });
-    }
-
-    const profile = await Customer.findById(customer._id);
-
-    if (!profile) {
-      return res.status(400).json({ message: 'User does not exist!' });
+      return res.status(404).json({ message: 'User does not exist!' });
     }
 
     const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
@@ -257,51 +242,46 @@ export const createOrder = async (req: Request, res: Response) => {
         orderStatus: 'Waiting'
       })
 
-      if (currentOrder) {
-        profile.orders?.push(currentOrder);
+      customer.orders.push(currentOrder);
 
-        await profile.save();
+      await customer.save();
 
-        return res.status(200).json(currentOrder);
-      }
+      return res.status(200).json(currentOrder);
     }
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
 export const getOrders = async (req: Request, res: Response) => {
   try {
-    const customer = req.user;
+    const user = req.user;
+    const customer = await Customer.findById(user?._id).populate('orders');
 
-    if (!customer) {
-      return res.status(404).json({ message: 'You are not logged in!' });
-    }
-
-    const profile = await Customer.findById(customer._id).populate('orders');
-
-    if (!profile || profile?.orders.length <= 0) {
+    if (!customer || customer.orders.length <= 0) {
       return res.status(404).json({ message: 'Orders not found!' });
     }
 
-    return res.status(200).json(profile.orders);
+    return res.status(200).json(customer.orders);
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
 export const getOrderById = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.id;
-
     const order = await Order.findById(orderId).populate('items.food');
 
     if (!order) {
-      return res.status(400).json({ message: 'Order not found!' });
+      return res.status(404).json({ message: 'Order not founds!' });
     }
 
     return res.status(200).json(order);
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
