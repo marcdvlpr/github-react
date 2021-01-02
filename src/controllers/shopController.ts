@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import { Merchant, IFoodModel } from '../models';
 
 export const getFoodAvailability = async (req: Request, res: Response) => {
-  const zipCode = req.params.zipCode;
-
   try {
+    const zipCode = req.params.zipCode;
+
     const restaurants = await Merchant
       .find({ zipCode, serviceAvailable: true })
       .sort([['rating', 'descending']])
@@ -16,14 +16,15 @@ export const getFoodAvailability = async (req: Request, res: Response) => {
 
     return res.status(200).json(restaurants);
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
 export const getTopRestaurants = async (req: Request, res: Response) => {
-  const zipCode = req.params.zipCode;
-
   try {
+    const zipCode = req.params.zipCode;
+
     const restaurants = await Merchant
       .find({ zipCode, serviceAvailable: true })
       .sort([['rating', 'descending']])
@@ -35,14 +36,15 @@ export const getTopRestaurants = async (req: Request, res: Response) => {
 
       return res.status(200).json(restaurants);
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
 export const getFoodsIn30Min = async (req: Request, res: Response) => {
-  const zipCode = req.params.zipCode;
-
   try {
+    const zipCode = req.params.zipCode;
+
     const restaurants = await Merchant
       .find({ zipCode, serviceAvailable: true })
       .sort([['rating', 'descending']])
@@ -62,14 +64,15 @@ export const getFoodsIn30Min = async (req: Request, res: Response) => {
 
     return res.status(200).json(foodResult);
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
 export const searchFoods = async (req: Request, res: Response) => {
-  const zipCode = req.params.zipCode;
-
   try {
+    const zipCode = req.params.zipCode;
+
     const restaurants = await Merchant
       .find({ zipCode, serviceAvailable: true })
       .populate('foods');
@@ -84,14 +87,14 @@ export const searchFoods = async (req: Request, res: Response) => {
 
     return res.status(200).json(foodResult);
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
 
 export const getRestaurantById = async (req: Request, res: Response) => {
-  const id = req.params.id;
-
   try {
+    const id = req.params.id;
     const restaurant = await Merchant.findById(id).populate('foods');
 
     if (!restaurant) {
@@ -100,6 +103,7 @@ export const getRestaurantById = async (req: Request, res: Response) => {
 
     return res.status(200).json(restaurant);
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
   }
 };
