@@ -13,6 +13,7 @@ interface ICustomerModel extends Document {
   otpExpiry: Date;
   latitude: number;
   longitude: number;
+  cart: any[];
   orders: IOrderModel[];
 }
 
@@ -55,6 +56,17 @@ const customerSchema = new Schema(
     longitude: {
       type: Number
     },
+    cart: [{
+      food: {
+        type: Schema.Types.ObjectId,
+        ref: 'Food',
+        required: true
+      },
+      quantity: {
+        type: Number,
+        required: true
+      }
+    }],
     orders: [{
       type: Schema.Types.ObjectId,
       ref: 'Order'

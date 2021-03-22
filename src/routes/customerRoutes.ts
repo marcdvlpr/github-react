@@ -8,7 +8,8 @@ import {
   editCustomerProfile,
   createOrder,
   getOrders,
-  getOrderById
+  getOrderById,
+  addToCart
 } from '../controllers/customerController';
 import { Authenticate } from '../middleware/auth';
 
@@ -26,6 +27,8 @@ router.patch('/profile', Authenticate, editCustomerProfile);
 router.post('/create-order', Authenticate, createOrder);
 router.get('/orders', Authenticate, getOrders);
 router.get('/order/:id', Authenticate, getOrderById);
+
+router.post('/cart', Authenticate, addToCart);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Customer' });

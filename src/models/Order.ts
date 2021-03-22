@@ -22,7 +22,7 @@ const orderSchema = new Schema(
         ref: 'Food',
         required: true
       },
-      unit: {
+      quantity: {
         type: Number,
         required: true
       }

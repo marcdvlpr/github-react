@@ -12,5 +12,5 @@ export interface ICustomerPayload {
 
 export interface ICartItem {
   _id: string;
-  unit: number;
+  quantity: number;
 }

@@ -215,7 +215,6 @@ export const createOrder = async (req: Request, res: Response) => {
 
     const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
 
-    // const cart = <ICartItem[]>req.body;
     const cart: ICartItem[] = req.body;
 
     let cartItems = Array();
@@ -224,10 +223,10 @@ export const createOrder = async (req: Request, res: Response) => {
     const foods = await Food.find().where('_id').in(cart.map(item => item._id)).exec();
 
     foods.map(food => {
-      cart.map(({ _id, unit }) => {
+      cart.map(({ _id, quantity }) => {
         if (String(food._id) === _id) {
-          netAmount += (food.price * unit);
-          cartItems.push({ food, unit });
+          netAmount += (food.price * quantity);
+          cartItems.push({ food, quantity });
         }
       })
     })
@@ -281,6 +280,51 @@ export const getOrderById = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json(order);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const addToCart = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const customer = await Customer.findById(user?._id);
+
+    if (!customer) {
+      return res.status(404).json({ message: 'User does not exist!' });
+    }
+
+    let cartItems = Array();
+
+    const { _id, quantity }: ICartItem = req.body;
+
+    const food = await Food.findById(_id);
+
+    if (!food) {
+      return res.status(404).json({ message: 'Unable to add to cart!' });
+    }
+
+    cartItems = customer.cart;
+
+    if (cartItems.length === 0) {
+      cartItems.push({ food, quantity });
+    }
+
+    const existFoodItems = cartItems.filter(item => String(item.food._id) === _id);
+
+    if (existFoodItems.length <= 0) {
+      cartItems.push({ food, quantity })
+    }
+
+    const index = cartItems.indexOf(existFoodItems[0]);
+    quantity > 0 ? cartItems[index] = { food, quantity } : cartItems.splice(index, 1);
+
+    customer.cart = cartItems as any;
+
+    const { cart } = await customer.save();
+
+    return res.status(200).json(cart);
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');
