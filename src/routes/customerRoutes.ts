@@ -10,7 +10,8 @@ import {
   getOrders,
   getOrderById,
   addToCart,
-  getCart
+  getCart,
+  deleteCart
 } from '../controllers/customerController';
 import { Authenticate } from '../middleware/auth';
 
@@ -31,6 +32,7 @@ router.get('/order/:id', Authenticate, getOrderById);
 
 router.post('/cart', Authenticate, addToCart);
 router.get('/cart', Authenticate, getCart);
+router.delete('/cart', Authenticate, deleteCart);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Customer' });

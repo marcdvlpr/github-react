@@ -352,3 +352,27 @@ export const getCart = async (req: Request, res: Response) => {
     return res.status(500).send('Server Error');
   }
 };
+
+export const deleteCart = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const customer = await Customer.findById(user?._id).populate('cart.food');
+
+    if (!customer) {
+      return res.status(404).json({ message: 'User does not exist!' });
+    }
+
+    if (customer.cart.length === 0) {
+      return res.status(404).json({ message: 'Cart is already empty!' });
+    }
+
+    customer.cart = [] as any;
+
+    const { cart } = await customer.save();
+
+    return res.status(200).json(cart);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
