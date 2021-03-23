@@ -10,7 +10,8 @@ import {
   getFoods,
   updateMerchantCoverImage,
   getOrders,
-  getOrderDetails
+  getOrderDetails,
+  processOrder
 } from '../controllers/merchantController';
 
 const router = express.Router();
@@ -27,6 +28,7 @@ router.get('/food', Authenticate, getFoods);
 
 router.get('/orders', Authenticate, getOrders);
 router.get('/order/:id', Authenticate, getOrderDetails);
+router.put('/order/:id/process', Authenticate, processOrder);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Merchant' });

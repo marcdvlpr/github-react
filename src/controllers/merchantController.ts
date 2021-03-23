@@ -197,3 +197,31 @@ export const getOrderDetails = async (req: Request, res: Response) => {
     return res.status(500).send('Server Error');
   }
 };
+
+export const processOrder = async (req: Request, res: Response) => {
+  try {
+    const orderId = req.params.id;
+    const { status, remarks, time } = req.body;
+
+    if (!orderId) {
+      return res.status(404).json({ message: 'Unable to process order!' });
+    }
+
+    const order = await Order.findById(orderId).populate('food');
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found!' });
+    }
+
+    order.orderStatus = status;
+    order.remarks = remarks;
+    if (time) order.readyTime = time;
+
+    const orderResult = await order.save();
+
+    return res.status(200).json(orderResult);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
