@@ -9,6 +9,9 @@ export interface IOrderModel extends Document {
   paidThrough: string;
   paymentResponse: string;
   orderStatus: string;
+  remarks: string;
+  deliveryId: string;
+  readyTime: number;
 }
 
 const orderSchema = new Schema(
@@ -47,6 +50,15 @@ const orderSchema = new Schema(
     },
     orderStatus: {
       type: String
+    },
+    remarks: {
+      type: String
+    },
+    deliveryId: {
+      type: String
+    },
+    readyTime: {
+      type: Number
     }
   },
   {
