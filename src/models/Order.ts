@@ -2,6 +2,7 @@ import { Schema, Document, model } from 'mongoose';
 
 export interface IOrderModel extends Document {
   orderId: string;
+  merchantId: string;
   items: any[];
   totalAmount: number;
   orderDate: Date;
@@ -13,6 +14,10 @@ export interface IOrderModel extends Document {
 const orderSchema = new Schema(
   {
     orderId: {
+      type: String,
+      required: true
+    },
+    merchantId: {
       type: String,
       required: true
     },

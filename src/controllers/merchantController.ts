@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Merchant, Food } from '../models';
+import { Merchant, Food, Order } from '../models';
 import { validatePassword, generateToken } from '../helpers/auth';
 import { IMerchantLoginInput, IEditMerchantInput, ICreateFoodItemInput } from '../interfaces';
 
@@ -160,6 +160,22 @@ export const getFoods = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json(foods);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const getOrders = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const orders = Order.find({ merchantId: user?._id }).populate('items.food');
+
+    if (!orders) {
+      return res.status(404).json({ message: 'Orders not found' });
+    }
+
+    return res.status(200).json(orders);
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');

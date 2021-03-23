@@ -8,7 +8,8 @@ import {
   updateMerchantService,
   addFoodItem,
   getFoods,
-  updateMerchantCoverImage
+  updateMerchantCoverImage,
+  getOrders
 } from '../controllers/merchantController';
 
 const router = express.Router();
@@ -22,6 +23,8 @@ router.patch('/service', Authenticate, updateMerchantService);
 
 router.post('/food', Authenticate, uploadImage.array('images', 10), addFoodItem);
 router.get('/food', Authenticate, getFoods);
+
+router.get('/orders', Authenticate, getOrders);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Merchant' });
