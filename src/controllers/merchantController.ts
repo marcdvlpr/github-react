@@ -169,7 +169,7 @@ export const getFoods = async (req: Request, res: Response) => {
 export const getOrders = async (req: Request, res: Response) => {
   try {
     const user = req.user;
-    const orders = Order.find({ merchantId: user?._id }).populate('items.food');
+    const orders = await Order.find({ merchantId: user?._id }).populate('items.food');
 
     if (!orders) {
       return res.status(404).json({ message: 'Orders not found' });

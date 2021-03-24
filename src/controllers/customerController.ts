@@ -219,34 +219,42 @@ export const createOrder = async (req: Request, res: Response) => {
 
     let cartItems = Array();
     let netAmount = 0.0;
+    let merchantId;
 
     const foods = await Food.find().where('_id').in(cart.map(item => item._id)).exec();
+
 
     foods.map(food => {
       cart.map(({ _id, quantity }) => {
         if (String(food._id) === _id) {
+          merchantId = food.merchantId;
           netAmount += (food.price * quantity);
           cartItems.push({ food, quantity });
         }
       })
-    })
+    });
 
     if (cartItems) {
       const currentOrder = await Order.create({
         orderId,
+        merchantId,
         items: cartItems,
         totalAmount: netAmount,
         orderDate: new Date(),
         paidThrough: 'COD',
         paymentResponse: '',
-        orderStatus: 'Waiting'
+        orderStatus: 'Waiting',
+        remarks: '',
+        deliveryId: '',
+        readyTime: 45
       })
 
+      customer.cart = [] as any;
       customer.orders.push(currentOrder);
 
-      await customer.save();
+      const customerResult = await customer.save();
 
-      return res.status(200).json(currentOrder);
+      return res.status(200).json(customerResult);
     }
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
@@ -314,7 +322,7 @@ export const addToCart = async (req: Request, res: Response) => {
     const existFoodItems = cartItems.filter(item => String(item.food._id) === _id);
 
     if (existFoodItems.length <= 0) {
-      cartItems.push({ food, quantity })
+      cartItems.push({ food, quantity });
     }
 
     const index = cartItems.indexOf(existFoodItems[0]);
