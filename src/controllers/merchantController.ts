@@ -309,3 +309,61 @@ export const getOffers = async (req: Request, res: Response) => {
     return res.status(500).send('Server Error');
   }
 };
+
+export const editOffer = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const offerId = req.params.id;
+
+    if (!offerId) {
+      return res.status(404).json({ message: 'Offer not founds!' });
+    }
+
+    const {
+      offerType,
+      title,
+      description,
+      minValue,
+      offerAmount,
+      startValidity,
+      endValidity,
+      promoCode,
+      promoType,
+      bank,
+      zipCode,
+      isActive
+    }: ICreateOfferInput = req.body;
+
+    const currentOffer = await Offer.findById(offerId);
+
+    if (!currentOffer) {
+      return res.status(404).json({ message: 'Offer not founds!' });
+    }
+
+    const merchant = await Merchant.findById(user?._id);
+
+    if (!merchant) {
+      return res.status(404).json({ message: 'Merchant does not exist!' });
+    }
+
+    currentOffer.offerType = offerType;
+    currentOffer.title = title;
+    currentOffer.description = description;
+    currentOffer.minValue = minValue;
+    currentOffer.offerAmount = offerAmount;
+    currentOffer.startValidity = startValidity;
+    currentOffer.endValidity = endValidity;
+    currentOffer.promoCode = promoCode;
+    currentOffer.promoType = promoType;
+    currentOffer.bank = bank;
+    currentOffer.zipCode = zipCode;
+    currentOffer.isActive = isActive;
+
+    const result = await currentOffer.save()
+
+    return res.status(200).json(result);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};

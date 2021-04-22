@@ -4,12 +4,13 @@ import { uploadImage } from '../middleware/upload';
 import {
   addFoodItem,
   addOffer,
-  merchantLogin,
+  editOffer,
   getFoods,
   getMerchantProfile,
   getOffers,
   getOrderDetails,
   getOrders,
+  merchantLogin,
   processOrder,
   updateMerchantCoverImage,
   updateMerchantProfile,
@@ -32,8 +33,9 @@ router.get('/orders', Authenticate, getOrders);
 router.get('/order/:id', Authenticate, getOrderDetails);
 router.put('/order/:id/process', Authenticate, processOrder);
 
-router.post('/offer', Authenticate, addOffer);
 router.get('/offers', Authenticate, getOffers);
+router.post('/offer', Authenticate, addOffer);
+router.put('/offer/:id', Authenticate, editOffer);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Merchant' });
