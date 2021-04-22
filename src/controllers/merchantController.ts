@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Merchant, Food, Order } from '../models';
+import { Merchant, Food, Order, Offer } from '../models';
 import { validatePassword, generateToken } from '../helpers/auth';
 import { IMerchantLoginInput, IEditMerchantInput, ICreateFoodItemInput } from '../interfaces';
 
@@ -220,6 +220,53 @@ export const processOrder = async (req: Request, res: Response) => {
     const orderResult = await order.save();
 
     return res.status(200).json(orderResult);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const addOffer = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const {
+      offerType,
+      title,
+      description,
+      minValue,
+      offerAmount,
+      startValidity,
+      endValidity,
+      promoCode,
+      promoType,
+      bank,
+      zipCode,
+      isActive
+    } = req.body;
+
+    const merchant = await Merchant.findById(user?._id);
+
+    if (!merchant) {
+      return res.status(404).json({ message: 'Merchant does not exist!' });
+    }
+
+    const offer = await Offer.create({
+      merchant: [merchant],
+      offerType,
+      title,
+      description,
+      minValue,
+      offerAmount,
+      startValidity,
+      endValidity,
+      promoCode,
+      promoType,
+      bank,
+      zipCode,
+      isActive
+    });
+
+    return res.status(201).json(offer);
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');

@@ -23,10 +23,10 @@ const offerSchema = new Schema(
       type: String,
       required: true
     },
-    merchant: {
+    merchant: [{
       type: Schema.Types.ObjectId,
       ref: 'Merchant'
-    },
+    }],
     title: {
       type: String,
       required: true

@@ -2,16 +2,17 @@ import express, { Request, Response } from 'express';
 import { Authenticate } from '../middleware/auth';
 import { uploadImage } from '../middleware/upload';
 import {
-  merchantLogin,
-  getMerchantProfile,
-  updateMerchantProfile,
-  updateMerchantService,
   addFoodItem,
+  addOffer,
+  merchantLogin,
   getFoods,
-  updateMerchantCoverImage,
-  getOrders,
+  getMerchantProfile,
   getOrderDetails,
-  processOrder
+  getOrders,
+  processOrder,
+  updateMerchantCoverImage,
+  updateMerchantProfile,
+  updateMerchantService
 } from '../controllers/merchantController';
 
 const router = express.Router();
@@ -29,6 +30,8 @@ router.get('/food', Authenticate, getFoods);
 router.get('/orders', Authenticate, getOrders);
 router.get('/order/:id', Authenticate, getOrderDetails);
 router.put('/order/:id/process', Authenticate, processOrder);
+
+router.post('/offer', Authenticate, addOffer);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Merchant' });
