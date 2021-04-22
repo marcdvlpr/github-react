@@ -281,7 +281,7 @@ export const addOffer = async (req: Request, res: Response) => {
 export const getOffers = async (req: Request, res: Response) => {
   try {
     const user = req.user;
-    const offers = await Offer.find().populate('merchant');
+    const offers = await Offer.find().populate('merchants');
 
     if (offers.length === 0) {
       return res.status(404).json({ message: 'Offers not available!' });
