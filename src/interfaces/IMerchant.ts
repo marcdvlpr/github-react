@@ -26,3 +26,20 @@ export interface IEditMerchantInput {
   address: string;
   phone: string;
 }
+
+export interface ICreateOfferInput {
+  offerType: string;
+  merchant: any[];
+  title: string;
+  description: string;
+  minValue: number;
+  offerAmount: number;
+  startValidity: Date;
+  endValidity: Date;
+  promoCode: string;
+  promoType: string;
+  bank: any[];
+  bins: any[];
+  zipCode: string;
+  isActive: boolean;
+}

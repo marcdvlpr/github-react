@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import { Merchant, Food, Order, Offer } from '../models';
 import { validatePassword, generateToken } from '../helpers/auth';
-import { IMerchantLoginInput, IEditMerchantInput, ICreateFoodItemInput } from '../interfaces';
+import {
+  IMerchantLoginInput,
+  IEditMerchantInput,
+  ICreateFoodItemInput,
+  ICreateOfferInput
+} from '../interfaces';
 
 export const merchantLogin = async (req: Request, res: Response) => {
   try {
@@ -242,7 +247,7 @@ export const addOffer = async (req: Request, res: Response) => {
       bank,
       zipCode,
       isActive
-    } = req.body;
+    }: ICreateOfferInput = req.body;
 
     const merchant = await Merchant.findById(user?._id);
 
