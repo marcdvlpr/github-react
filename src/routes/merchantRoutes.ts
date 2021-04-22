@@ -7,6 +7,7 @@ import {
   merchantLogin,
   getFoods,
   getMerchantProfile,
+  getOffers,
   getOrderDetails,
   getOrders,
   processOrder,
@@ -32,6 +33,7 @@ router.get('/order/:id', Authenticate, getOrderDetails);
 router.put('/order/:id/process', Authenticate, processOrder);
 
 router.post('/offer', Authenticate, addOffer);
+router.get('/offers', Authenticate, getOffers);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Merchant' });

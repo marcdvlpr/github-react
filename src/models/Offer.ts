@@ -2,7 +2,7 @@ import { Schema, Document, model } from 'mongoose';
 
 interface IOfferModel extends Document {
   offerType: string;
-  merchant: any[];
+  merchants: any[];
   title: string;
   description: string;
   minValue: number;
@@ -23,7 +23,7 @@ const offerSchema = new Schema(
       type: String,
       required: true
     },
-    merchant: [{
+    merchants: [{
       type: Schema.Types.ObjectId,
       ref: 'Merchant'
     }],

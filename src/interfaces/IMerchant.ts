@@ -29,7 +29,7 @@ export interface IEditMerchantInput {
 
 export interface ICreateOfferInput {
   offerType: string;
-  merchant: any[];
+  merchants: any[];
   title: string;
   description: string;
   minValue: number;

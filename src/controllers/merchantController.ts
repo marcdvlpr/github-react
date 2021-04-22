@@ -256,7 +256,7 @@ export const addOffer = async (req: Request, res: Response) => {
     }
 
     const offer = await Offer.create({
-      merchant: [merchant],
+      merchants: [merchant],
       offerType,
       title,
       description,
@@ -272,6 +272,38 @@ export const addOffer = async (req: Request, res: Response) => {
     });
 
     return res.status(201).json(offer);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const getOffers = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const offers = await Offer.find().populate('merchant');
+
+    if (offers.length === 0) {
+      return res.status(404).json({ message: 'Offers not available!' });
+    }
+
+    let currentOffer = Array();
+
+    offers.map(item => {
+      if (item.merchants) {
+        item.merchants.map(merchant => {
+          if (String(merchant._id) === user?._id) {
+            currentOffer.push(item);
+          }
+        })
+      }
+
+      if (item.offerType === 'GENERIC') {
+        currentOffer.push(item);
+      }
+    })
+
+    return res.status(200).json(currentOffer);
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');
