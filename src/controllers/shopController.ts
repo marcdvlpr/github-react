@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Merchant, IFoodModel } from '../models';
+import { Merchant, IFoodModel, Offer } from '../models';
 
 export const getFoodAvailability = async (req: Request, res: Response) => {
   try {
@@ -102,6 +102,23 @@ export const getRestaurantById = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json(restaurant);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const getOffers = async (req: Request, res: Response) => {
+  try {
+    const zipCode = req.params.zipCode;
+
+    const offers = await Offer.find({ zipCode, isActive: true });
+
+    if (!offers) {
+      return res.status(404).json({ message: 'Offers not found!' });
+    }
+
+    return res.status(200).json(offers);
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');
