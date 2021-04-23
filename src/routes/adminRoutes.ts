@@ -3,7 +3,8 @@ import {
   createMerchant,
   getMerchants,
   getMerchantById,
-  getTransactions
+  getTransactions,
+  getTransactionById
 } from '../controllers/adminController';
 
 const router = express.Router();
@@ -13,6 +14,7 @@ router.get('/merchants', getMerchants);
 router.get('/merchant/:id', getMerchantById);
 
 router.get('/transactions', getTransactions);
+router.get('/transaction/:id', getTransactionById);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Admin' });

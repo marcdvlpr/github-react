@@ -90,3 +90,19 @@ export const getTransactions = async (req: Request, res: Response) => {
     return res.status(500).send('Server Error');
   }
 };
+
+export const getTransactionById = async (req: Request, res: Response) => {
+  try {
+    const transactionId = req.params.id;
+    const transaction = await Transaction.findById(transactionId);
+
+    if (!transaction) {
+      return res.status(404).json({ message: 'Transaction data not available!' });
+    }
+
+    return res.status(200).json(transaction);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
