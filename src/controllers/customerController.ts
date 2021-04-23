@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { Customer, Food, Offer, Order } from '../models';
+import { Customer, Food, Offer, Order, Transaction } from '../models';
 import { customerRegisterInput, customerLoginInput } from '../validators/customer';
 import { IEditCustomerProfileInput, ICartItem } from '../interfaces';
 import {
@@ -395,6 +395,39 @@ export const verifyOffer = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({ message: 'Offer is valid', offer });
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const createPayment = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const { amount, paymentMode, offerId } = req.body;
+
+    let payableAmount = Number(amount);
+
+    if (offerId) {
+      const offer = await Offer.findById(offerId);
+
+      if (offer?.isActive && offer?.minValue <= payableAmount) {
+        payableAmount = payableAmount - offer.offerAmount;
+      }
+    }
+
+    const transaction = await Transaction.create({
+      customer: user?._id,
+      merchantId: '',
+      orderId: '',
+      orderValue: payableAmount,
+      offerUsed: offerId || 'NA',
+      status: 'OPEN',
+      paymentMode,
+      paymentResponse: 'Payment is cash on delivery'
+    });
+
+    return res.status(200).json(transaction);
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');

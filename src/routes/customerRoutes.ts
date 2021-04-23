@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import {
   addToCart,
   createOrder,
+  createPayment,
   customerLogin,
   customerRegister,
   customerRequestOtp,
@@ -36,6 +37,8 @@ router.get('/cart', Authenticate, getCart);
 router.delete('/cart', Authenticate, deleteCart);
 
 router.get('/offer/verify/:id', Authenticate, verifyOffer);
+
+router.post('/create-payment', Authenticate, createPayment);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Customer' });
