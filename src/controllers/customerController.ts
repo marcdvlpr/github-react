@@ -224,20 +224,17 @@ export const createOrder = async (req: Request, res: Response) => {
 
     const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
 
-    const cart: ICartItem[] = req.body;
-
     let cartItems = Array();
     let netAmount = 0.0;
     let merchantId = '';
 
-    const foods = await Food.find().where('_id').in(cart.map(item => item._id)).exec();
-
+    const foods = await Food.find().where('_id').in(items.map(item => item._id)).exec();
 
     foods.map(food => {
-      cart.map(({ _id, quantity }) => {
+      items.map(({ _id, quantity }) => {
         if (String(food._id) === _id) {
           merchantId = food.merchantId;
-          netAmount += (food.price * quantity);
+          netAmount += food.price * quantity;
           cartItems.push({ food, quantity });
         }
       })
@@ -249,9 +246,8 @@ export const createOrder = async (req: Request, res: Response) => {
         merchantId,
         items: cartItems,
         totalAmount: netAmount,
+        paidAmount: amount,
         orderDate: new Date(),
-        paidThrough: 'COD',
-        paymentResponse: '',
         orderStatus: 'Waiting',
         remarks: '',
         deliveryId: '',

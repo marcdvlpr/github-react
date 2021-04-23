@@ -5,9 +5,8 @@ export interface IOrderModel extends Document {
   merchantId: string;
   items: any[];
   totalAmount: number;
+  paidAmount: number;
   orderDate: Date;
-  paidThrough: string;
-  paymentResponse: string;
   orderStatus: string;
   remarks: string;
   deliveryId: string;
@@ -39,14 +38,12 @@ const orderSchema = new Schema(
       type: Number,
       required: true
     },
+    paidAmount: {
+      type: Number,
+      required: true
+    },
     orderDate: {
       type: Date
-    },
-    paidThrough: {
-      type: String
-    },
-    paymentResponse: {
-      type: String
     },
     orderStatus: {
       type: String
