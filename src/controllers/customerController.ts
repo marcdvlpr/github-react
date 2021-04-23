@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Customer, Food, Offer, Order, Transaction } from '../models';
 import { customerRegisterInput, customerLoginInput } from '../validators/customer';
-import { IEditCustomerProfileInput, ICartItem } from '../interfaces';
+import { IEditCustomerProfileInput, ICartItem, IOrderInput } from '../interfaces';
 import {
   generatePasswordHash,
   validatePassword,
@@ -11,6 +11,7 @@ import {
   requestOtp,
   generateToken
 } from '../helpers/auth';
+import { validateTransaction } from '../helpers/transaction';
 
 export const customerRegister = async (req: Request, res: Response) => {
   try {
@@ -207,6 +208,14 @@ export const editCustomerProfile = async (req: Request, res: Response) => {
 export const createOrder = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+    const { txId, amount, items }: IOrderInput = req.body;
+
+    const { status, transaction } = await validateTransaction(txId);
+
+    if (!status || !transaction) {
+      return res.status(404).json({ message: 'Error while create order!' });
+    }
+
     const customer = await Customer.findById(user?._id);
 
     if (!customer) {
@@ -219,7 +228,7 @@ export const createOrder = async (req: Request, res: Response) => {
 
     let cartItems = Array();
     let netAmount = 0.0;
-    let merchantId;
+    let merchantId = '';
 
     const foods = await Food.find().where('_id').in(cart.map(item => item._id)).exec();
 
@@ -251,6 +260,12 @@ export const createOrder = async (req: Request, res: Response) => {
 
       customer.cart = [] as any;
       customer.orders.push(currentOrder);
+
+      transaction.merchantId = merchantId;
+      transaction.orderId = orderId;
+      transaction.status = 'CONFIRMED';
+
+      await transaction.save();
 
       const customerResult = await customer.save();
 

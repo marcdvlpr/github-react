@@ -14,3 +14,9 @@ export interface ICartItem {
   _id: string;
   quantity: number;
 }
+
+export interface IOrderInput {
+  txId: string;
+  amount: string;
+  items: ICartItem[];
+}
