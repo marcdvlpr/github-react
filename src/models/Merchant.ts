@@ -13,6 +13,8 @@ interface IMerchantModel extends Document {
   coverImages: string[];
   rating: number;
   foods: any;
+  latitude: number;
+  longitude: number;
 }
 
 const merchantSchema = new Schema(
@@ -63,6 +65,12 @@ const merchantSchema = new Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Food'
     }],
+    latitude: {
+      type: Number
+    },
+    longitude: {
+      type: Number
+    }
   },
   {
     toJSON: {

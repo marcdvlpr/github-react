@@ -101,6 +101,7 @@ export const updateMerchantCoverImage = async (req: Request, res: Response) => {
 export const updateMerchantService = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+    const { latitude, longitude } = req.body;
     const merchant = await Merchant.findById(user?._id);
 
     if (!merchant) {
@@ -108,6 +109,11 @@ export const updateMerchantService = async (req: Request, res: Response) => {
     }
 
     merchant.serviceAvailable = !merchant.serviceAvailable;
+
+    if (latitude && longitude) {
+      merchant.latitude = latitude;
+      merchant.longitude = longitude;
+    }
 
     const saveResult = await merchant.save();
 

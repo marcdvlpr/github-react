@@ -35,7 +35,9 @@ export const createMerchant = async (req: Request, res: Response) => {
       owner,
       serviceAvailable: false,
       coverImages: [],
-      rating: 0
+      rating: 0,
+      latitude: 0,
+      longitude: 0
     });
 
     return res.status(201).json(newMerchant);
