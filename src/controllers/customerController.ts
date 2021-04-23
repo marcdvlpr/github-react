@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { Customer, Food, Order } from '../models';
+import { Customer, Food, Offer, Order } from '../models';
 import { customerRegisterInput, customerLoginInput } from '../validators/customer';
 import { IEditCustomerProfileInput, ICartItem } from '../interfaces';
 import {
@@ -107,8 +107,8 @@ export const customerLogin = async (req: Request, res: Response) => {
 
 export const customerVerify = async (req: Request, res: Response) => {
   try {
-    const { otp } = req.body;
     const user = req.user;
+    const { otp } = req.body;
 
     const customer = await Customer.findById(user?._id);
 
@@ -379,6 +379,22 @@ export const deleteCart = async (req: Request, res: Response) => {
     const { cart } = await customer.save();
 
     return res.status(200).json(cart);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const verifyOffer = async (req: Request, res: Response) => {
+  try {
+    const offerId = req.params.id;
+    const offer = await Offer.findById(offerId);
+
+    if (!offer?.isActive) {
+      return res.status(404).json({ message: 'Offer is not valid!' });
+    }
+
+    return res.status(200).json({ message: 'Offer is valid', offer });
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');

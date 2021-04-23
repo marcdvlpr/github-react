@@ -1,17 +1,18 @@
 import express, { Request, Response } from 'express';
 import {
-  customerRegister,
-  customerLogin,
-  customerVerify,
-  customerRequestOtp,
-  getCustomerProfile,
-  editCustomerProfile,
-  createOrder,
-  getOrders,
-  getOrderById,
   addToCart,
+  createOrder,
+  customerLogin,
+  customerRegister,
+  customerRequestOtp,
+  customerVerify,
+  deleteCart,
+  editCustomerProfile,
   getCart,
-  deleteCart
+  getCustomerProfile,
+  getOrderById,
+  getOrders,
+  verifyOffer
 } from '../controllers/customerController';
 import { Authenticate } from '../middleware/auth';
 
@@ -33,6 +34,8 @@ router.get('/order/:id', Authenticate, getOrderById);
 router.post('/cart', Authenticate, addToCart);
 router.get('/cart', Authenticate, getCart);
 router.delete('/cart', Authenticate, deleteCart);
+
+router.get('/offer/verify/:id', Authenticate, verifyOffer);
 
 router.get('/', (req: Request, res: Response) => {
   return res.json({ message: 'Hello from Customer' });
