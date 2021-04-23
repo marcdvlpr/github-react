@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Merchant } from '../models';
+import { Merchant, Transaction } from '../models';
 import { generatePasswordHash } from '../helpers/auth';
 import { ICreateMerchantInput } from '../interfaces';
 
@@ -60,16 +60,31 @@ export const getMerchants = async (req: Request, res: Response) => {
   }
 };
 
-export const getMerchantByID = async (req: Request, res: Response) => {
+export const getMerchantById = async (req: Request, res: Response) => {
   try {
-    const merchantID = req.params.id;
-    const merchant = await Merchant.findById(merchantID);
+    const merchantId = req.params.id;
+    const merchant = await Merchant.findById(merchantId);
 
     if (!merchant) {
       return res.status(404).json({ message: 'Merchant data not found!' });
     }
 
     return res.status(200).json(merchant);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const getTransactions = async (req: Request, res: Response) => {
+  try {
+    const transactions = await Transaction.find();
+
+    if (!transactions) {
+      return res.status(404).json({ message: 'Transactions data not available!' });
+    }
+
+    return res.status(200).json(transactions);
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');
