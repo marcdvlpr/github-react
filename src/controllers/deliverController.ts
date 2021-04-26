@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Deliver } from '../models';
-import { DeliverRegisterInput } from '../validators/deliver';
-import { generatePasswordHash, generateToken } from '../helpers/auth';
+import { DeliverRegisterInput, DeliverLoginInput } from '../validators/deliver';
+import { generatePasswordHash, generateToken, validatePassword } from '../helpers/auth';
 
 export const deliverRegister = async (req: Request, res: Response) => {
   try {
@@ -49,6 +49,43 @@ export const deliverRegister = async (req: Request, res: Response) => {
     });
 
     return res.status(201).json({ email: deliver.email, verified: deliver.verified, token });
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const deliverLogin = async (req: Request, res: Response) => {
+  try {
+    const deliverInputs = plainToClass(DeliverLoginInput, req.body);
+
+    const validationError = await validate(deliverInputs, { validationError: { target: true } });
+
+    if (validationError.length > 0) {
+      return res.status(400).json(validationError);
+    }
+
+    const { email, password } = deliverInputs;
+
+    const deliver = await Deliver.findOne({ email }).select('+password');
+
+    if (!deliver) {
+      return res.status(401).json({ message: 'Incorrect email or password' });
+    }
+
+    const isMatch = await validatePassword(password, deliver.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Incorrect email or password' });
+    }
+
+    const token = generateToken({
+      _id: deliver._id,
+      email: deliver.email,
+      verified: deliver.verified
+    });
+
+    return res.status(200).json({ email: deliver.email, verified: deliver.verified, token });
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');

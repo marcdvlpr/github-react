@@ -22,3 +22,11 @@ export class DeliverRegisterInput {
   @Length(4, 10)
   zipCode: string;
 }
+
+export class DeliverLoginInput {
+  @IsEmail()
+  email: string;
+
+  @Length(8, 40)
+  password: string;
+}
