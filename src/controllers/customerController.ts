@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Customer, Food, Offer, Order, Transaction } from '../models';
-import { customerRegisterInput, customerLoginInput } from '../validators/customer';
+import { CustomerRegisterInput, CustomerLoginInput } from '../validators/customer';
 import { IEditCustomerProfileInput, ICartItem, IOrderInput } from '../interfaces';
 import {
   generatePasswordHash,
@@ -15,7 +15,7 @@ import { validateTransaction } from '../helpers/transaction';
 
 export const customerRegister = async (req: Request, res: Response) => {
   try {
-    const customerInputs = plainToClass(customerRegisterInput, req.body);
+    const customerInputs = plainToClass(CustomerRegisterInput, req.body);
 
     const validationError = await validate(customerInputs, { validationError: { target: true } });
 
@@ -71,7 +71,7 @@ export const customerRegister = async (req: Request, res: Response) => {
 
 export const customerLogin = async (req: Request, res: Response) => {
   try {
-    const customerInputs = plainToClass(customerLoginInput, req.body);
+    const customerInputs = plainToClass(CustomerLoginInput, req.body);
 
     const validationError = await validate(customerInputs, { validationError: { target: true } });
 
