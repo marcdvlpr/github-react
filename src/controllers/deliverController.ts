@@ -1,23 +1,23 @@
 import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
-import { Delivery } from '../models';
-import { DeliveryRegisterInput } from '../validators/delivery';
+import { Deliver } from '../models';
+import { DeliverRegisterInput } from '../validators/deliver';
 import { generatePasswordHash, generateToken } from '../helpers/auth';
 
 export const deliverRegister = async (req: Request, res: Response) => {
   try {
-    const deliveryInputs = plainToClass(DeliveryRegisterInput, req.body);
+    const deliverInputs = plainToClass(DeliverRegisterInput, req.body);
 
-    const validationError = await validate(deliveryInputs, { validationError: { target: true } });
+    const validationError = await validate(deliverInputs, { validationError: { target: true } });
 
     if (validationError.length > 0) {
       return res.status(400).json(validationError);
     }
 
-    const { email, phone, password, firstName, lastName, address, zipCode } = deliveryInputs;
+    const { email, phone, password, firstName, lastName, address, zipCode } = deliverInputs;
 
-    const hasDeliver = await Delivery.findOne({ email });
+    const hasDeliver = await Deliver.findOne({ email });
 
     if (hasDeliver) {
       return res.status(400).json({ message: 'Deliver already exists!' });
@@ -25,7 +25,7 @@ export const deliverRegister = async (req: Request, res: Response) => {
 
     const hashPassword = await generatePasswordHash(password);
 
-    const deliver = await Delivery.create({
+    const deliver = await Deliver.create({
       email,
       phone,
       password: hashPassword,

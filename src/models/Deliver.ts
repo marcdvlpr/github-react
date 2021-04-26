@@ -1,6 +1,6 @@
 import { Schema, Document, model } from 'mongoose';
 
-interface IDeliveryModel extends Document {
+interface IDeliverModel extends Document {
   email: string;
   password: string;
   firstName: string;
@@ -16,7 +16,7 @@ interface IDeliveryModel extends Document {
   isAvailable: boolean;
 }
 
-const deliverySchema = new Schema(
+const deliverSchema = new Schema(
   {
     email: {
       type: String,
@@ -75,4 +75,4 @@ const deliverySchema = new Schema(
   }
 );
 
-export const Delivery = model<IDeliveryModel>('Delivery', deliverySchema);
+export const Deliver = model<IDeliverModel>('Deliver', deliverSchema);
