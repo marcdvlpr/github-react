@@ -15,4 +15,10 @@ export class DeliveryRegisterInput {
 
   @Length(3, 14)
   lastName: string;
+
+  @Length(6, 40)
+  address: string;
+
+  @Length(4, 10)
+  zipCode: string;
 }
