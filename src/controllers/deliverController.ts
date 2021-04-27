@@ -144,3 +144,30 @@ export const editDeliverProfile = async (req: Request, res: Response) => {
     return res.status(500).send('Server Error');
   }
 };
+
+export const updateDeliverStatus = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const { latitude, longitude } = req.body;
+
+    const profile = await Deliver.findById(user?._id);
+
+    if (!profile) {
+      return res.status(404).json({ message: 'Deliver does not exist!' });
+    }
+
+    if (latitude && longitude) {
+      profile.latitude = latitude;
+      profile.longitude = longitude;
+    }
+
+    profile.isAvailable = !profile.isAvailable;
+
+    await profile.save();
+
+    return res.status(200).json(profile);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
