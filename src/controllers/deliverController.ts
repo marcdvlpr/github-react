@@ -2,7 +2,11 @@ import { Request, Response } from 'express';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Deliver } from '../models';
-import { DeliverRegisterInput, DeliverLoginInput } from '../validators/deliver';
+import {
+  DeliverRegisterInput,
+  DeliverLoginInput,
+  EditDeliverProfileInput
+} from '../validators/deliver';
 import { generatePasswordHash, generateToken, validatePassword } from '../helpers/auth';
 
 export const deliverRegister = async (req: Request, res: Response) => {
@@ -100,6 +104,39 @@ export const getDeliverProfile = async (req: Request, res: Response) => {
     if (!profile) {
       return res.status(404).json({ message: 'Deliver does not exist!' });
     }
+
+    return res.status(200).json(profile);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const editDeliverProfile = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+
+    const deliverInputs = plainToClass(EditDeliverProfileInput, req.body);
+
+    const validationError = await validate(deliverInputs, { validationError: { target: true } });
+
+    if (validationError.length > 0) {
+      return res.status(400).json(validationError);
+    }
+
+    const { firstName, lastName, address } = deliverInputs;
+
+    const profile = await Deliver.findById(user?._id);
+
+    if (!profile) {
+      return res.status(404).json({ message: 'Deliver does not exist!' });
+    }
+
+    profile.firstName = firstName;
+    profile.lastName = lastName;
+    profile.address = address;
+
+    await profile.save();
 
     return res.status(200).json(profile);
   } catch (error) {

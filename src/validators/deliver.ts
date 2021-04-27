@@ -30,3 +30,14 @@ export class DeliverLoginInput {
   @Length(8, 40)
   password: string;
 }
+
+export class EditDeliverProfileInput {
+  @Length(3, 14)
+  firstName: string;
+
+  @Length(3, 14)
+  lastName: string;
+
+  @Length(6, 40)
+  address: string;
+}
