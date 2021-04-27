@@ -133,3 +133,18 @@ export const verifyDeliver = async (req: Request, res: Response) => {
     return res.status(500).send('Server Error');
   }
 };
+
+export const getDelivers = async (req: Request, res: Response) => {
+  try {
+    const delivers = await Deliver.find();
+
+    if (!delivers) {
+      return res.status(404).json({ message: 'Unable to get delivers' });
+    }
+
+    return res.status(200).json(delivers);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
