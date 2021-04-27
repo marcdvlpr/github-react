@@ -12,6 +12,7 @@ import {
   generateToken
 } from '../helpers/auth';
 import { validateTransaction } from '../helpers/transaction';
+import { assignOrderForDeliver } from '../helpers/deliver';
 
 export const customerRegister = async (req: Request, res: Response) => {
   try {
@@ -262,6 +263,8 @@ export const createOrder = async (req: Request, res: Response) => {
       transaction.status = 'CONFIRMED';
 
       await transaction.save();
+
+      await assignOrderForDeliver(currentOrder._id, merchantId);
 
       const customerResult = await customer.save();
 
