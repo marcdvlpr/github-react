@@ -91,3 +91,19 @@ export const deliverLogin = async (req: Request, res: Response) => {
     return res.status(500).send('Server Error');
   }
 };
+
+export const getDeliverProfile = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const profile = await Deliver.findById(user?._id);
+
+    if (!profile) {
+      return res.status(404).json({ message: 'Deliver does not exist!' });
+    }
+
+    return res.status(200).json(profile);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
