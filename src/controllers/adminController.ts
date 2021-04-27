@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Merchant, Transaction } from '../models';
+import { Merchant, Transaction, Deliver } from '../models';
 import { generatePasswordHash } from '../helpers/auth';
 import { ICreateMerchantInput } from '../interfaces';
 
@@ -103,6 +103,31 @@ export const getTransactionById = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json(transaction);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const verifyDeliver = async (req: Request, res: Response) => {
+  try {
+    const { deliverId, status } = req.body;
+
+    if (!deliverId) {
+      return res.status(404).json({ message: 'Unable to verify deliver!' });
+    }
+
+    const profile = await Deliver.findById(deliverId);
+
+    if (!profile) {
+      return res.status(404).json({ message: 'Deliver does not exist!' });
+    }
+
+    profile.verified = status;
+
+    await profile.save();
+
+    return res.status(200).json(profile);
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');
