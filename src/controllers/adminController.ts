@@ -18,9 +18,7 @@ export const createMerchant = async (req: Request, res: Response) => {
 
     const existingMerchant = await Merchant.findOne({ email });
 
-    if (existingMerchant) {
-      return res.status(400).json({ message: 'Merchant already exists!'})
-    };
+    if (existingMerchant) return res.status(400).json({ message: 'Merchant already exists!'});
 
     const hashPassword = await generatePasswordHash(password);
 
@@ -51,9 +49,7 @@ export const getMerchants = async (req: Request, res: Response) => {
   try {
     const merchants = await Merchant.find();
 
-    if (!merchants) {
-      return res.status(404).json({ message: 'Merchants data not available!' });
-    }
+    if (!merchants) return res.status(404).json({ message: 'Merchants data not available!' });
 
     return res.status(200).json(merchants);
   } catch (error) {
@@ -67,9 +63,7 @@ export const getMerchantById = async (req: Request, res: Response) => {
     const merchantId = req.params.id;
     const merchant = await Merchant.findById(merchantId);
 
-    if (!merchant) {
-      return res.status(404).json({ message: 'Merchant data not found!' });
-    }
+    if (!merchant) return res.status(404).json({ message: 'Merchant data not found!' });
 
     return res.status(200).json(merchant);
   } catch (error) {
@@ -82,9 +76,7 @@ export const getTransactions = async (req: Request, res: Response) => {
   try {
     const transactions = await Transaction.find();
 
-    if (!transactions) {
-      return res.status(404).json({ message: 'Transactions data not available!' });
-    }
+    if (!transactions) return res.status(404).json({ message: 'Transactions data not available!' });
 
     return res.status(200).json(transactions);
   } catch (error) {
@@ -98,9 +90,7 @@ export const getTransactionById = async (req: Request, res: Response) => {
     const transactionId = req.params.id;
     const transaction = await Transaction.findById(transactionId);
 
-    if (!transaction) {
-      return res.status(404).json({ message: 'Transaction data not available!' });
-    }
+    if (!transaction) return res.status(404).json({ message: 'Transaction data not available!' });
 
     return res.status(200).json(transaction);
   } catch (error) {
@@ -113,15 +103,11 @@ export const verifyDeliver = async (req: Request, res: Response) => {
   try {
     const { deliverId, status } = req.body;
 
-    if (!deliverId) {
-      return res.status(404).json({ message: 'Unable to verify deliver!' });
-    }
+    if (!deliverId) return res.status(404).json({ message: 'Unable to verify deliver!' });
 
     const profile = await Deliver.findById(deliverId);
 
-    if (!profile) {
-      return res.status(404).json({ message: 'Deliver does not exist!' });
-    }
+    if (!profile) return res.status(404).json({ message: 'Deliver does not exist!' });
 
     profile.verified = status;
 
@@ -138,9 +124,7 @@ export const getDelivers = async (req: Request, res: Response) => {
   try {
     const delivers = await Deliver.find();
 
-    if (!delivers) {
-      return res.status(404).json({ message: 'Unable to get delivers' });
-    }
+    if (!delivers) return res.status(404).json({ message: 'Unable to get delivers!' });
 
     return res.status(200).json(delivers);
   } catch (error) {
