@@ -20,17 +20,13 @@ export const customerRegister = async (req: Request, res: Response) => {
 
     const validationError = await validate(customerInputs, { validationError: { target: true } });
 
-    if (validationError.length > 0) {
-      return res.status(400).json(validationError);
-    }
+    if (validationError.length > 0) return res.status(400).json(validationError);
 
     const { email, phone, password } = customerInputs;
 
     const customer = await Customer.findOne({ email });
 
-    if (customer) {
-      return res.status(400).json({ message: 'User already exists!' });
-    }
+    if (customer) return res.status(400).json({ message: 'User already exists!' });
 
     const hashPassword = await generatePasswordHash(password);
 
@@ -51,9 +47,7 @@ export const customerRegister = async (req: Request, res: Response) => {
       orders: []
     });
 
-    if (!user) {
-      return res.status(400).json({ message: 'Error while creating user' });
-    }
+    if (!user) return res.status(400).json({ message: 'Error while creating user' });
 
     await requestOtp(otp, phone);
 
@@ -76,23 +70,17 @@ export const customerLogin = async (req: Request, res: Response) => {
 
     const validationError = await validate(customerInputs, { validationError: { target: true } });
 
-    if (validationError.length > 0) {
-      return res.status(400).json(validationError);
-    }
+    if (validationError.length > 0) return res.status(400).json(validationError);
 
     const { email, password } = customerInputs;
 
     const customer = await Customer.findOne({ email }).select('+password');
 
-    if (!customer) {
-      return res.status(401).json({ message: 'Incorrect email or password' });
-    }
+    if (!customer) return res.status(401).json({ message: 'Incorrect email or password' });
 
     const isMatch = await validatePassword(password, customer.password);
 
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Incorrect email or password' });
-    }
+    if (!isMatch) return res.status(401).json({ message: 'Incorrect email or password' });
 
     const token = generateToken({
       _id: customer._id,
@@ -114,9 +102,7 @@ export const customerVerify = async (req: Request, res: Response) => {
 
     const customer = await Customer.findById(user?._id);
 
-    if (!customer) {
-      return res.status(404).json({ message: 'User does not exist!' });
-    }
+    if (!customer) return res.status(404).json({ message: 'User does not exist!' });
 
     if (customer.otpExpiry <= new Date() || customer.otp !== parseInt(otp)) {
       return res.status(404).json({ message: 'You need to request a new OTP!' });
@@ -148,9 +134,7 @@ export const customerRequestOtp = async (req: Request, res: Response) => {
     const user = req.user;
     const customer = await Customer.findById(user?._id);
 
-    if (!customer) {
-      return res.status(404).json({ message: 'User does not exist!' });
-    }
+    if (!customer) return res.status(404).json({ message: 'User does not exist!' });
 
     const { otp, otpExpiry } = generateOtp();
     customer.otp = otp;
@@ -159,7 +143,7 @@ export const customerRequestOtp = async (req: Request, res: Response) => {
     await customer.save();
     await requestOtp(otp, customer.phone);
 
-    return res.status(200).json({ message: 'OTP sent to your mobile number!' });
+    return res.status(200).json({ message: 'OTP sent to your phone number!' });
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');
@@ -171,9 +155,7 @@ export const getCustomerProfile = async (req: Request, res: Response) => {
     const user = req.user;
     const profile = await Customer.findById(user?._id);
 
-    if (!profile) {
-      return res.status(404).json({ message: 'User does not exist!' });
-    }
+    if (!profile) return res.status(404).json({ message: 'User does not exist!' });
 
     return res.status(200).json(profile);
   } catch (error) {
@@ -189,9 +171,7 @@ export const editCustomerProfile = async (req: Request, res: Response) => {
 
     const profile = await Customer.findById(user?._id);
 
-    if (!profile) {
-      return res.status(404).json({ message: 'User does not exist!' });
-    }
+    if (!profile) return res.status(404).json({ message: 'User does not exist!' });
 
     profile.firstName = firstName;
     profile.lastName = lastName;
@@ -213,15 +193,11 @@ export const createOrder = async (req: Request, res: Response) => {
 
     const { status, transaction } = await validateTransaction(txId);
 
-    if (!status || !transaction) {
-      return res.status(404).json({ message: 'Error while create order!' });
-    }
+    if (!status || !transaction) return res.status(404).json({ message: 'Error while create order!' });
 
     const customer = await Customer.findById(user?._id);
 
-    if (!customer) {
-      return res.status(404).json({ message: 'User does not exist!' });
-    }
+    if (!customer) return res.status(404).json({ message: 'User does not exist!' });
 
     const orderId = `${Math.floor(Math.random() * 89999) + 1000}`;
 
@@ -297,9 +273,7 @@ export const getOrderById = async (req: Request, res: Response) => {
     const orderId = req.params.id;
     const order = await Order.findById(orderId).populate('items.food');
 
-    if (!order) {
-      return res.status(404).json({ message: 'Order not founds!' });
-    }
+    if (!order) return res.status(404).json({ message: 'Order not founds!' });
 
     return res.status(200).json(order);
   } catch (error) {
@@ -313,9 +287,7 @@ export const addToCart = async (req: Request, res: Response) => {
     const user = req.user;
     const customer = await Customer.findById(user?._id);
 
-    if (!customer) {
-      return res.status(404).json({ message: 'User does not exist!' });
-    }
+    if (!customer) return res.status(404).json({ message: 'User does not exist!' });
 
     let cartItems = Array();
 
@@ -323,21 +295,15 @@ export const addToCart = async (req: Request, res: Response) => {
 
     const food = await Food.findById(_id);
 
-    if (!food) {
-      return res.status(404).json({ message: 'Unable to add to cart!' });
-    }
+    if (!food) return res.status(404).json({ message: 'Unable to add to cart!' });
 
     cartItems = customer.cart;
 
-    if (cartItems.length === 0) {
-      cartItems.push({ food, quantity });
-    }
+    if (cartItems.length === 0) cartItems.push({ food, quantity });
 
     const existFoodItems = cartItems.filter(item => String(item.food._id) === _id);
 
-    if (existFoodItems.length <= 0) {
-      cartItems.push({ food, quantity });
-    }
+    if (existFoodItems.length <= 0) cartItems.push({ food, quantity });
 
     const index = cartItems.indexOf(existFoodItems[0]);
     quantity > 0 ? cartItems[index] = { food, quantity } : cartItems.splice(index, 1);
@@ -358,15 +324,11 @@ export const getCart = async (req: Request, res: Response) => {
     const user = req.user;
     const customer = await Customer.findById(user?._id).populate('cart.food');
 
-    if (!customer) {
-      return res.status(404).json({ message: 'User does not exist!' });
-    }
+    if (!customer) return res.status(404).json({ message: 'User does not exist!' });
 
     const { cart } = customer;
 
-    if (cart.length === 0) {
-      return res.status(404).json({ message: 'Your cart is empty!' });
-    }
+    if (cart.length === 0) return res.status(404).json({ message: 'Your cart is empty!' });
 
     return res.status(200).json(cart);
   } catch (error) {
@@ -380,13 +342,9 @@ export const deleteCart = async (req: Request, res: Response) => {
     const user = req.user;
     const customer = await Customer.findById(user?._id).populate('cart.food');
 
-    if (!customer) {
-      return res.status(404).json({ message: 'User does not exist!' });
-    }
+    if (!customer) return res.status(404).json({ message: 'User does not exist!' });
 
-    if (customer.cart.length === 0) {
-      return res.status(404).json({ message: 'Cart is already empty!' });
-    }
+    if (customer.cart.length === 0) return res.status(404).json({ message: 'Cart is already empty!' });
 
     customer.cart = [] as any;
 
@@ -404,9 +362,7 @@ export const verifyOffer = async (req: Request, res: Response) => {
     const offerId = req.params.id;
     const offer = await Offer.findById(offerId);
 
-    if (!offer?.isActive) {
-      return res.status(404).json({ message: 'Offer is not valid!' });
-    }
+    if (!offer?.isActive) return res.status(404).json({ message: 'Offer is not valid!' });
 
     return res.status(200).json({ message: 'Offer is valid', offer });
   } catch (error) {
