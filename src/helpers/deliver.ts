@@ -19,7 +19,7 @@ export const assignOrderForDeliver = async (orderId: string, merchantId: string)
 
       if (order) {
         order.deliveryId = deliver[0]._id;
-        const response = await order.save();
+        await order.save();
       }
     }
   } catch (error) {

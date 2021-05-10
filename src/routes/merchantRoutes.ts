@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { Authenticate } from '../middleware/auth';
 import { uploadImage } from '../middleware/upload';
 import {
@@ -21,24 +21,18 @@ const router = express.Router();
 
 router.post('/login', merchantLogin);
 
-router.get('/profile', Authenticate, getMerchantProfile);
-router.patch('/profile', Authenticate, updateMerchantProfile);
-router.patch('/coverimage', Authenticate, uploadImage.array('images', 10), updateMerchantCoverImage);
-router.patch('/service', Authenticate, updateMerchantService);
-
-router.post('/food', Authenticate, uploadImage.array('images', 10), addFoodItem);
-router.get('/food', Authenticate, getFoods);
-
-router.get('/orders', Authenticate, getOrders);
-router.get('/order/:id', Authenticate, getOrderDetails);
-router.put('/order/:id/process', Authenticate, processOrder);
-
-router.get('/offers', Authenticate, getOffers);
-router.post('/offer', Authenticate, addOffer);
-router.put('/offer/:id', Authenticate, editOffer);
-
-router.get('/', (req: Request, res: Response) => {
-  return res.json({ message: 'Hello from Merchant' });
-});
+router.use(Authenticate);
+router.get('/profile', getMerchantProfile);
+router.patch('/profile', updateMerchantProfile);
+router.patch('/coverimage', uploadImage.array('images', 10), updateMerchantCoverImage);
+router.patch('/service', updateMerchantService);
+router.post('/food', uploadImage.array('images', 10), addFoodItem);
+router.get('/food', getFoods);
+router.get('/orders', getOrders);
+router.get('/order/:id', getOrderDetails);
+router.put('/order/:id/process', processOrder);
+router.get('/offers', getOffers);
+router.post('/offer', addOffer);
+router.put('/offer/:id', editOffer);
 
 export default router;

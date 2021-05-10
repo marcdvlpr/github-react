@@ -10,10 +10,10 @@ export class DeliverRegisterInput {
   @Length(8, 40)
   password: string;
 
-  @Length(3, 14)
+  @Length(2, 16)
   firstName: string;
 
-  @Length(3, 14)
+  @Length(2, 16)
   lastName: string;
 
   @Length(6, 40)
@@ -32,10 +32,10 @@ export class DeliverLoginInput {
 }
 
 export class EditDeliverProfileInput {
-  @Length(3, 14)
+  @Length(2, 16)
   firstName: string;
 
-  @Length(3, 14)
+  @Length(2, 16)
   lastName: string;
 
   @Length(6, 40)

@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import {
   getFoodAvailability,
   getFoodsIn30Min,
@@ -16,9 +16,5 @@ router.get('/foods30min/:zipCode', getFoodsIn30Min);
 router.get('/search/:zipCode', searchFoods);
 router.get('/offers/:zipCode', getOffers);
 router.get('/restaurant/:id', getRestaurantById);
-
-router.get('/', (req: Request, res: Response) => {
-  return res.json({ message: 'Hello from Shop' });
-});
 
 export default router;

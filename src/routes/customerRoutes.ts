@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import {
   addToCart,
   createOrder,
@@ -22,26 +22,18 @@ const router = express.Router();
 router.post('/register', customerRegister);
 router.post('/login', customerLogin);
 
-router.patch('/verify', Authenticate, customerVerify);
-router.get('/otp', Authenticate, customerRequestOtp);
-
-router.get('/profile', Authenticate, getCustomerProfile);
-router.patch('/profile', Authenticate, editCustomerProfile);
-
-router.post('/create-order', Authenticate, createOrder);
-router.get('/orders', Authenticate, getOrders);
-router.get('/order/:id', Authenticate, getOrderById);
-
-router.post('/cart', Authenticate, addToCart);
-router.get('/cart', Authenticate, getCart);
-router.delete('/cart', Authenticate, deleteCart);
-
-router.get('/offer/verify/:id', Authenticate, verifyOffer);
-
-router.post('/create-payment', Authenticate, createPayment);
-
-router.get('/', (req: Request, res: Response) => {
-  return res.json({ message: 'Hello from Customer' });
-});
+router.use(Authenticate);
+router.patch('/verify', customerVerify);
+router.get('/otp', customerRequestOtp);
+router.get('/profile', getCustomerProfile);
+router.patch('/profile', editCustomerProfile);
+router.post('/create-order', createOrder);
+router.get('/orders', getOrders);
+router.get('/order/:id', getOrderById);
+router.post('/cart', addToCart);
+router.get('/cart', getCart);
+router.delete('/cart', deleteCart);
+router.get('/offer/verify/:id', verifyOffer);
+router.post('/create-payment', createPayment);
 
 export default router;
