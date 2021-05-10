@@ -15,17 +15,13 @@ export const deliverRegister = async (req: Request, res: Response) => {
 
     const validationError = await validate(deliverInputs, { validationError: { target: true } });
 
-    if (validationError.length > 0) {
-      return res.status(400).json(validationError);
-    }
+    if (validationError.length > 0) return res.status(400).json(validationError);
 
     const { email, phone, password, firstName, lastName, address, zipCode } = deliverInputs;
 
     const hasDeliver = await Deliver.findOne({ email });
 
-    if (hasDeliver) {
-      return res.status(400).json({ message: 'Deliver already exists!' });
-    }
+    if (hasDeliver) return res.status(400).json({ message: 'Deliver already exists!' });
 
     const hashPassword = await generatePasswordHash(password);
 
@@ -42,9 +38,7 @@ export const deliverRegister = async (req: Request, res: Response) => {
       longitude: 0
     });
 
-    if (!deliver) {
-      return res.status(400).json({ message: 'Error while creating user' });
-    }
+    if (!deliver) return res.status(400).json({ message: 'Error while creating deliver' });
 
     const token = generateToken({
       _id: deliver._id,
@@ -65,23 +59,17 @@ export const deliverLogin = async (req: Request, res: Response) => {
 
     const validationError = await validate(deliverInputs, { validationError: { target: true } });
 
-    if (validationError.length > 0) {
-      return res.status(400).json(validationError);
-    }
+    if (validationError.length > 0) return res.status(400).json(validationError);
 
     const { email, password } = deliverInputs;
 
     const deliver = await Deliver.findOne({ email }).select('+password');
 
-    if (!deliver) {
-      return res.status(401).json({ message: 'Incorrect email or password' });
-    }
+    if (!deliver) return res.status(401).json({ message: 'Incorrect email or password' });
 
     const isMatch = await validatePassword(password, deliver.password);
 
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Incorrect email or password' });
-    }
+    if (!isMatch) return res.status(401).json({ message: 'Incorrect email or password' });
 
     const token = generateToken({
       _id: deliver._id,
@@ -101,9 +89,7 @@ export const getDeliverProfile = async (req: Request, res: Response) => {
     const user = req.user;
     const profile = await Deliver.findById(user?._id);
 
-    if (!profile) {
-      return res.status(404).json({ message: 'Deliver does not exist!' });
-    }
+    if (!profile) return res.status(404).json({ message: 'Deliver does not exist!' });
 
     return res.status(200).json(profile);
   } catch (error) {
@@ -120,17 +106,13 @@ export const editDeliverProfile = async (req: Request, res: Response) => {
 
     const validationError = await validate(deliverInputs, { validationError: { target: true } });
 
-    if (validationError.length > 0) {
-      return res.status(400).json(validationError);
-    }
+    if (validationError.length > 0) return res.status(400).json(validationError);
 
     const { firstName, lastName, address } = deliverInputs;
 
     const profile = await Deliver.findById(user?._id);
 
-    if (!profile) {
-      return res.status(404).json({ message: 'Deliver does not exist!' });
-    }
+    if (!profile) return res.status(404).json({ message: 'Deliver does not exist!' });
 
     profile.firstName = firstName;
     profile.lastName = lastName;
@@ -152,9 +134,7 @@ export const updateDeliverStatus = async (req: Request, res: Response) => {
 
     const profile = await Deliver.findById(user?._id);
 
-    if (!profile) {
-      return res.status(404).json({ message: 'Deliver does not exist!' });
-    }
+    if (!profile) return res.status(404).json({ message: 'Deliver does not exist!' });
 
     if (latitude && longitude) {
       profile.latitude = latitude;
