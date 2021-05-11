@@ -60,7 +60,7 @@ export const getFoodsIn30Min = async (req: Request, res: Response) => {
   }
 };
 
-export const searchFoods = async (req: Request, res: Response) => {
+export const foodSearch = async (req: Request, res: Response) => {
   try {
     const postalCode = req.params.postalCode;
     const restaurants = await Merchant.find({ postalCode, serviceAvailable: true }).populate('foods');

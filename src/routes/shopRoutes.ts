@@ -5,7 +5,7 @@ import {
   getOffers,
   getRestaurantById,
   getTopRestaurants,
-  searchFoods
+  foodSearch
 } from '../controllers/shopController';
 
 const router = express.Router();
@@ -13,7 +13,7 @@ const router = express.Router();
 router.get('/:postalCode', getFoodAvailability);
 router.get('/top-restaurant/:postalCode', getTopRestaurants);
 router.get('/foods30min/:postalCode', getFoodsIn30Min);
-router.get('/search/:postalCode', searchFoods);
+router.get('/search/:postalCode', foodSearch);
 router.get('/offers/:postalCode', getOffers);
 router.get('/restaurant/:id', getRestaurantById);
 
