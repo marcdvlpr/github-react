@@ -17,7 +17,7 @@ export const deliverRegister = async (req: Request, res: Response) => {
 
     if (validationError.length > 0) return res.status(400).json(validationError);
 
-    const { email, phone, password, firstName, lastName, address, zipCode } = deliverInputs;
+    const { email, phone, password, firstName, lastName, address, postalCode } = deliverInputs;
 
     const hasDeliver = await Deliver.findOne({ email });
 
@@ -32,7 +32,7 @@ export const deliverRegister = async (req: Request, res: Response) => {
       firstName,
       lastName,
       address,
-      zipCode,
+      postalCode,
       verified: false,
       latitude: 0,
       longitude: 0

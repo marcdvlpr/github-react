@@ -8,11 +8,11 @@ export const assignOrderForDeliver = async (orderId: string, merchantId: string)
       throw new Error('Merchant does not exist!');
     }
 
-    const areaCode = merchant.zipCode;
+    const areaCode = merchant.postalCode;
     const merchantLatitude = merchant.latitude;
     const merchantLongitude = merchant.longitude;
 
-    const deliver = await Deliver.find({ zipCode: areaCode, verified: true, isAvailable: true });
+    const deliver = await Deliver.find({ postalCode: areaCode, verified: true, isAvailable: true });
 
     if (deliver) {
       const order = await Order.findById(orderId);

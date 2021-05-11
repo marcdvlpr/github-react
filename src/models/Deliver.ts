@@ -6,7 +6,7 @@ interface IDeliverModel extends Document {
   firstName: string;
   lastName: string;
   address: string;
-  zipCode: string;
+  postalCode: string;
   phone: string;
   verified: boolean;
   otp: number;
@@ -36,7 +36,7 @@ const deliverSchema = new Schema(
     address: {
       type: String
     },
-    zipCode: {
+    postalCode: {
       type: String
     },
     phone: {

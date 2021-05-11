@@ -3,9 +3,9 @@ import { Merchant, IFoodModel, Offer } from '../models';
 
 export const getFoodAvailability = async (req: Request, res: Response) => {
   try {
-    const zipCode = req.params.zipCode;
+    const postalCode = req.params.postalCode;
     const restaurants = await Merchant
-      .find({ zipCode, serviceAvailable: true })
+      .find({ postalCode, serviceAvailable: true })
       .sort([['rating', 'descending']])
       .populate('foods');
 
@@ -20,9 +20,9 @@ export const getFoodAvailability = async (req: Request, res: Response) => {
 
 export const getTopRestaurants = async (req: Request, res: Response) => {
   try {
-    const zipCode = req.params.zipCode;
+    const postalCode = req.params.postalCode;
     const restaurants = await Merchant
-      .find({ zipCode, serviceAvailable: true })
+      .find({ postalCode, serviceAvailable: true })
       .sort([['rating', 'descending']])
       .limit(10);
 
@@ -37,9 +37,9 @@ export const getTopRestaurants = async (req: Request, res: Response) => {
 
 export const getFoodsIn30Min = async (req: Request, res: Response) => {
   try {
-    const zipCode = req.params.zipCode;
+    const postalCode = req.params.postalCode;
     const restaurants = await Merchant
-      .find({ zipCode, serviceAvailable: true })
+      .find({ postalCode, serviceAvailable: true })
       .sort([['rating', 'descending']])
       .populate('foods');
 
@@ -62,8 +62,8 @@ export const getFoodsIn30Min = async (req: Request, res: Response) => {
 
 export const searchFoods = async (req: Request, res: Response) => {
   try {
-    const zipCode = req.params.zipCode;
-    const restaurants = await Merchant.find({ zipCode, serviceAvailable: true }).populate('foods');
+    const postalCode = req.params.postalCode;
+    const restaurants = await Merchant.find({ postalCode, serviceAvailable: true }).populate('foods');
 
     if (restaurants.length === 0) return res.status(404).json({ message: 'Data not found!' });
 
@@ -94,8 +94,8 @@ export const getRestaurantById = async (req: Request, res: Response) => {
 
 export const getOffers = async (req: Request, res: Response) => {
   try {
-    const zipCode = req.params.zipCode;
-    const offers = await Offer.find({ zipCode, isActive: true });
+    const postalCode = req.params.postalCode;
+    const offers = await Offer.find({ postalCode, isActive: true });
 
     if (!offers) return res.status(404).json({ message: 'Offers not found!' });
 

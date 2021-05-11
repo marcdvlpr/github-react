@@ -251,7 +251,7 @@ export const addOffer = async (req: Request, res: Response) => {
       promoCode,
       promoType,
       bank,
-      zipCode,
+      postalCode,
       isActive
     }: ICreateOfferInput = req.body;
 
@@ -273,7 +273,7 @@ export const addOffer = async (req: Request, res: Response) => {
       promoCode,
       promoType,
       bank,
-      zipCode,
+      postalCode,
       isActive
     });
 
@@ -336,7 +336,7 @@ export const editOffer = async (req: Request, res: Response) => {
       promoCode,
       promoType,
       bank,
-      zipCode,
+      postalCode,
       isActive
     }: ICreateOfferInput = req.body;
 
@@ -362,7 +362,7 @@ export const editOffer = async (req: Request, res: Response) => {
     currentOffer.promoCode = promoCode;
     currentOffer.promoType = promoType;
     currentOffer.bank = bank;
-    currentOffer.zipCode = zipCode;
+    currentOffer.postalCode = postalCode;
     currentOffer.isActive = isActive;
 
     const result = await currentOffer.save()

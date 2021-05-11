@@ -10,11 +10,11 @@ import {
 
 const router = express.Router();
 
-router.get('/:zipCode', getFoodAvailability);
-router.get('/top-restaurant/:zipCode', getTopRestaurants);
-router.get('/foods30min/:zipCode', getFoodsIn30Min);
-router.get('/search/:zipCode', searchFoods);
-router.get('/offers/:zipCode', getOffers);
+router.get('/:postalCode', getFoodAvailability);
+router.get('/top-restaurant/:postalCode', getTopRestaurants);
+router.get('/foods30min/:postalCode', getFoodsIn30Min);
+router.get('/search/:postalCode', searchFoods);
+router.get('/offers/:postalCode', getOffers);
 router.get('/restaurant/:id', getRestaurantById);
 
 export default router;

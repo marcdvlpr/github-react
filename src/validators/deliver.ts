@@ -20,7 +20,7 @@ export class DeliverRegisterInput {
   address: string;
 
   @Length(4, 10)
-  zipCode: string;
+  postalCode: string;
 }
 
 export class DeliverLoginInput {

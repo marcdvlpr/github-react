@@ -4,7 +4,7 @@ interface IMerchantModel extends Document {
   name: string;
   foodType: string[];
   address: string;
-  zipCode: string;
+  postalCode: string;
   phone: string;
   email: string;
   password: string;
@@ -29,7 +29,7 @@ const merchantSchema = new Schema(
     address: {
       type: String
     },
-    zipCode: {
+    postalCode: {
       type: String,
       required: true
     },

@@ -13,7 +13,7 @@ interface IOfferModel extends Document {
   promoType: string;
   bank: any[];
   bins: any[];
-  zipCode: string;
+  postalCode: string;
   isActive: boolean;
 }
 
@@ -62,7 +62,7 @@ const offerSchema = new Schema(
     bins: [{
       type: Number
     }],
-    zipCode: {
+    postalCode: {
       type: String,
       required: true
     },

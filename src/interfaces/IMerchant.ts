@@ -2,7 +2,7 @@ export interface ICreateMerchantInput {
   name: string;
   foodType: string[];
   address: string;
-  zipCode: string;
+  postalCode: string;
   phone: string;
   email: string;
   password: string;
@@ -40,6 +40,6 @@ export interface ICreateOfferInput {
   promoType: string;
   bank: any[];
   bins: any[];
-  zipCode: string;
+  postalCode: string;
   isActive: boolean;
 }
