@@ -32,7 +32,7 @@ export const createMerchant = async (req: Request, res: Response) => {
       password: hashPassword,
       owner,
       serviceAvailable: false,
-      coverImages: [],
+      images: [],
       rating: 0,
       latitude: 0,
       longitude: 0
@@ -61,6 +61,7 @@ export const getMerchants = async (req: Request, res: Response) => {
 export const getMerchantById = async (req: Request, res: Response) => {
   try {
     const merchantId = req.params.id;
+
     const merchant = await Merchant.findById(merchantId);
 
     if (!merchant) return res.status(404).json({ message: 'Merchant data not found!' });
@@ -88,6 +89,7 @@ export const getTransactions = async (req: Request, res: Response) => {
 export const getTransactionById = async (req: Request, res: Response) => {
   try {
     const transactionId = req.params.id;
+
     const transaction = await Transaction.findById(transactionId);
 
     if (!transaction) return res.status(404).json({ message: 'Transaction data not available!' });

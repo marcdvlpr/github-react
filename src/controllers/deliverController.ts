@@ -87,6 +87,7 @@ export const deliverLogin = async (req: Request, res: Response) => {
 export const getDeliverProfile = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const profile = await Deliver.findById(user?._id);
 
     if (!profile) return res.status(404).json({ message: 'Deliver does not exist!' });

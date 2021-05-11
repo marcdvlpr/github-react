@@ -11,6 +11,7 @@ import {
 export const merchantLogin = async (req: Request, res: Response) => {
   try {
     const { email, password }: IMerchantLoginInput = req.body;
+
     const merchant = await Merchant.findOne({ email }).select('+password');
 
     if (!merchant) return res.status(401).json({ message: 'Incorrect email or password' });
@@ -37,6 +38,7 @@ export const merchantLogin = async (req: Request, res: Response) => {
 export const getMerchantProfile = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const merchant = await Merchant.findById(user?._id);
 
     return res.status(200).json(merchant);
@@ -74,6 +76,7 @@ export const updateMerchantProfile = async (req: Request, res: Response) => {
 export const updateMerchantCoverImage = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const merchant = await Merchant.findById(user?._id);
 
     if (!merchant) return res.status(400).json({ message: 'Unable to update merchant profile!' });
@@ -81,7 +84,7 @@ export const updateMerchantCoverImage = async (req: Request, res: Response) => {
     const files = req.files as Express.Multer.File[];
     const images = files.map((file: Express.Multer.File) => file.filename);
 
-    merchant.coverImages.push(...images);
+    merchant.images.push(...images);
 
     const saveResult = await merchant.save();
 
@@ -96,6 +99,7 @@ export const updateMerchantService = async (req: Request, res: Response) => {
   try {
     const user = req.user;
     const { latitude, longitude } = req.body;
+
     const merchant = await Merchant.findById(user?._id);
 
     if (!merchant) return res.status(400).json({ message: 'Unable to update merchant profile!' });
@@ -154,6 +158,7 @@ export const addFoodItem = async (req: Request, res: Response) => {
 export const getFoods = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const foods = await Food.find({ merchantId: user?._id });
 
     if (foods.length === 0) return res.status(404).json({ message: 'Foods not found!' });
@@ -168,6 +173,7 @@ export const getFoods = async (req: Request, res: Response) => {
 export const getOrders = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const orders = await Order.find({ merchantId: user?._id }).populate('items.food');
 
     if (!orders) return res.status(404).json({ message: 'Orders not found' });
@@ -182,6 +188,7 @@ export const getOrders = async (req: Request, res: Response) => {
 export const getOrderDetails = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.id;
+
     const order = await Order.findById(orderId).populate('items.food');
 
     if (!order) return res.status(404).json({ message: 'Order not found!' });
@@ -265,6 +272,7 @@ export const addOffer = async (req: Request, res: Response) => {
 export const getOffers = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const offers = await Offer.find().populate('merchants');
 
     if (offers.length === 0) return res.status(404).json({ message: 'Offers not available!' });

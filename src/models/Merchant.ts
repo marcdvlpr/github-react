@@ -10,7 +10,7 @@ interface IMerchantModel extends Document {
   password: string;
   owner: string;
   serviceAvailable: boolean;
-  coverImages: string[];
+  images: string[];
   rating: number;
   foods: any;
   latitude: number;
@@ -55,7 +55,7 @@ const merchantSchema = new Schema(
     serviceAvailable: {
       type: Boolean
     },
-    coverImages: {
+    images: {
       type: [String]
     },
     rating: {

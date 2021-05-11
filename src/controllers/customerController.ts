@@ -132,6 +132,7 @@ export const customerVerify = async (req: Request, res: Response) => {
 export const customerRequestOtp = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const customer = await Customer.findById(user?._id);
 
     if (!customer) return res.status(404).json({ message: 'User does not exist!' });
@@ -153,6 +154,7 @@ export const customerRequestOtp = async (req: Request, res: Response) => {
 export const getCustomerProfile = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const profile = await Customer.findById(user?._id);
 
     if (!profile) return res.status(404).json({ message: 'User does not exist!' });
@@ -255,6 +257,7 @@ export const createOrder = async (req: Request, res: Response) => {
 export const getOrders = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const customer = await Customer.findById(user?._id).populate('orders');
 
     if (!customer || customer.orders.length <= 0) {
@@ -271,6 +274,7 @@ export const getOrders = async (req: Request, res: Response) => {
 export const getOrderById = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.id;
+
     const order = await Order.findById(orderId).populate('items.food');
 
     if (!order) return res.status(404).json({ message: 'Order not founds!' });
@@ -285,6 +289,7 @@ export const getOrderById = async (req: Request, res: Response) => {
 export const addToCart = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const customer = await Customer.findById(user?._id);
 
     if (!customer) return res.status(404).json({ message: 'User does not exist!' });
@@ -322,6 +327,7 @@ export const addToCart = async (req: Request, res: Response) => {
 export const getCart = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const customer = await Customer.findById(user?._id).populate('cart.food');
 
     if (!customer) return res.status(404).json({ message: 'User does not exist!' });
@@ -340,6 +346,7 @@ export const getCart = async (req: Request, res: Response) => {
 export const deleteCart = async (req: Request, res: Response) => {
   try {
     const user = req.user;
+
     const customer = await Customer.findById(user?._id).populate('cart.food');
 
     if (!customer) return res.status(404).json({ message: 'User does not exist!' });
@@ -360,6 +367,7 @@ export const deleteCart = async (req: Request, res: Response) => {
 export const verifyOffer = async (req: Request, res: Response) => {
   try {
     const offerId = req.params.id;
+
     const offer = await Offer.findById(offerId);
 
     if (!offer?.isActive) return res.status(404).json({ message: 'Offer is not valid!' });

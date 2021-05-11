@@ -4,6 +4,7 @@ import { Merchant, IFoodModel, Offer } from '../models';
 export const getFoodAvailability = async (req: Request, res: Response) => {
   try {
     const postalCode = req.params.postalCode;
+
     const restaurants = await Merchant
       .find({ postalCode, serviceAvailable: true })
       .sort([['rating', 'descending']])
@@ -21,6 +22,7 @@ export const getFoodAvailability = async (req: Request, res: Response) => {
 export const getTopRestaurants = async (req: Request, res: Response) => {
   try {
     const postalCode = req.params.postalCode;
+
     const restaurants = await Merchant
       .find({ postalCode, serviceAvailable: true })
       .sort([['rating', 'descending']])
@@ -38,6 +40,7 @@ export const getTopRestaurants = async (req: Request, res: Response) => {
 export const getFoodsIn30Min = async (req: Request, res: Response) => {
   try {
     const postalCode = req.params.postalCode;
+
     const restaurants = await Merchant
       .find({ postalCode, serviceAvailable: true })
       .sort([['rating', 'descending']])
@@ -63,6 +66,7 @@ export const getFoodsIn30Min = async (req: Request, res: Response) => {
 export const foodSearch = async (req: Request, res: Response) => {
   try {
     const postalCode = req.params.postalCode;
+
     const restaurants = await Merchant.find({ postalCode, serviceAvailable: true }).populate('foods');
 
     if (restaurants.length === 0) return res.status(404).json({ message: 'Data not found!' });
@@ -81,6 +85,7 @@ export const foodSearch = async (req: Request, res: Response) => {
 export const getRestaurantById = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
+
     const restaurant = await Merchant.findById(id).populate('foods');
 
     if (!restaurant) return res.status(404).json({ message: 'Data not found!' });
@@ -95,6 +100,7 @@ export const getRestaurantById = async (req: Request, res: Response) => {
 export const getOffers = async (req: Request, res: Response) => {
   try {
     const postalCode = req.params.postalCode;
+
     const offers = await Offer.find({ postalCode, isActive: true });
 
     if (!offers) return res.status(404).json({ message: 'Offers not found!' });
