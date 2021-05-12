@@ -1,10 +1,13 @@
 import 'dotenv/config';
 import express, { Application } from 'express';
+import helmet from 'helmet';
 import logger from 'morgan';
 import path from 'path';
 import routes from './routes';
 
 const app: Application = express();
+
+app.use(helmet());
 
 if (process.env.NODE_ENV === 'development') app.use(logger('dev'));
 
