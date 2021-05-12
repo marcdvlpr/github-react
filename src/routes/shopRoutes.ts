@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 router.get('/:postalCode', getFoodAvailability);
-router.get('/top-restaurant/:postalCode', getTopRestaurants);
+router.get('/top-restaurants/:postalCode', getTopRestaurants);
 router.get('/foods30min/:postalCode', getFoodsIn30Min);
 router.get('/search/:postalCode', foodSearch);
 router.get('/offers/:postalCode', getOffers);
