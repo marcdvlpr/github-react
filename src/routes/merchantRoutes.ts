@@ -1,5 +1,5 @@
 import express from 'express';
-import { Authenticate, uploadImage } from '../middleware';
+import { Authenticate, uploadImage, rateLimiter } from '../middleware';
 import {
   addFoodItem,
   addOffer,
@@ -18,7 +18,7 @@ import {
 
 const router = express.Router();
 
-router.post('/login', merchantLogin);
+router.post('/login', rateLimiter, merchantLogin);
 
 router.use(Authenticate);
 router.get('/profile', getMerchantProfile);

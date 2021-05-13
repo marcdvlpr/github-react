@@ -1,4 +1,5 @@
 import express from 'express';
+import { Authenticate, rateLimiter } from '../middleware';
 import {
   addToCart,
   createOrder,
@@ -15,12 +16,11 @@ import {
   getOrders,
   verifyOffer
 } from '../controllers/customerController';
-import { Authenticate } from '../middleware';
 
 const router = express.Router();
 
 router.post('/register', customerRegister);
-router.post('/login', customerLogin);
+router.post('/login', rateLimiter, customerLogin);
 
 router.use(Authenticate);
 router.patch('/verify', customerVerify);

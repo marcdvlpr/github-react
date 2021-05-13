@@ -1,4 +1,5 @@
 import express from 'express';
+import { Authenticate, rateLimiter } from '../middleware';
 import {
   deliverRegister,
   deliverLogin,
@@ -6,12 +7,11 @@ import {
   editDeliverProfile,
   updateDeliverStatus
 } from '../controllers/deliverController';
-import { Authenticate } from '../middleware';
 
 const router = express.Router();
 
 router.post('/register', deliverRegister);
-router.post('/login', deliverLogin);
+router.post('/login', rateLimiter, deliverLogin);
 
 router.use(Authenticate);
 router.get('/profile', getDeliverProfile);
