@@ -1,6 +1,5 @@
 import express from 'express';
-import { Authenticate } from '../middleware/auth';
-import { uploadImage } from '../middleware/upload';
+import { Authenticate, uploadImage } from '../middleware';
 import {
   addFoodItem,
   addOffer,

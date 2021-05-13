@@ -15,7 +15,7 @@ import {
   getOrders,
   verifyOffer
 } from '../controllers/customerController';
-import { Authenticate } from '../middleware/auth';
+import { Authenticate } from '../middleware';
 
 const router = express.Router();
 

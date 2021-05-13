@@ -6,7 +6,7 @@ import {
   editDeliverProfile,
   updateDeliverStatus
 } from '../controllers/deliverController';
-import { Authenticate } from '../middleware/auth';
+import { Authenticate } from '../middleware';
 
 const router = express.Router();
 
