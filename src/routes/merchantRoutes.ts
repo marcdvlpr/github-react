@@ -1,5 +1,5 @@
 import express from 'express';
-import { Authenticate, uploadImage, rateLimiter } from '../middleware';
+import { authenticate, uploadImage, rateLimiter } from '../middleware';
 import {
   addFoodItem,
   addOffer,
@@ -20,7 +20,7 @@ const router = express.Router();
 
 router.post('/login', rateLimiter, merchantLogin);
 
-router.use(Authenticate);
+router.use(authenticate);
 router.get('/profile', getMerchantProfile);
 router.patch('/profile', updateMerchantProfile);
 router.patch('/coverimage', uploadImage.array('images', 10), updateMerchantCoverImage);

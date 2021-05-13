@@ -1,5 +1,5 @@
 import express from 'express';
-import { Authenticate, rateLimiter } from '../middleware';
+import { authenticate, rateLimiter } from '../middleware';
 import {
   addToCart,
   createOrder,
@@ -22,7 +22,7 @@ const router = express.Router();
 router.post('/register', customerRegister);
 router.post('/login', rateLimiter, customerLogin);
 
-router.use(Authenticate);
+router.use(authenticate);
 router.patch('/verify', customerVerify);
 router.get('/otp', customerRequestOtp);
 router.get('/profile', getCustomerProfile);
