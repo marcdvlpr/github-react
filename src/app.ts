@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express, { Application } from 'express';
 import helmet from 'helmet';
+import compression from 'compression';
 import logger from 'morgan';
 import path from 'path';
 import routes from './routes';
@@ -8,6 +9,7 @@ import routes from './routes';
 const app: Application = express();
 
 app.use(helmet());
+app.use(compression());
 
 if (process.env.NODE_ENV === 'development') app.use(logger('dev'));
 
