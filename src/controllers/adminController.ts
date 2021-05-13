@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Merchant, Transaction, Deliver } from '../models';
-import { generatePasswordHash } from '../helpers/auth';
+import { generatePasswordHash } from '../helpers';
 import { ICreateMerchantInput } from '../interfaces';
 
 export const createMerchant = async (req: Request, res: Response) => {

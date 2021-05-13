@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import {
   getFoodAvailability,
   getFoodsIn30Min,
@@ -8,7 +8,7 @@ import {
   foodSearch
 } from '../controllers/shopController';
 
-const router = express.Router();
+const router = Router();
 
 router.get('/:postalCode', getFoodAvailability);
 router.get('/top-restaurants/:postalCode', getTopRestaurants);

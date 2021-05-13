@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import { authenticate, uploadImage, rateLimiter } from '../middleware';
 import {
   addFoodItem,
@@ -16,7 +16,7 @@ import {
   updateMerchantService
 } from '../controllers/merchantController';
 
-const router = express.Router();
+const router = Router();
 
 router.post('/login', rateLimiter, merchantLogin);
 

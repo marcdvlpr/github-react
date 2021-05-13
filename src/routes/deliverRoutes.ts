@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import { authenticate, rateLimiter } from '../middleware';
 import {
   deliverRegister,
@@ -8,7 +8,7 @@ import {
   updateDeliverStatus
 } from '../controllers/deliverController';
 
-const router = express.Router();
+const router = Router();
 
 router.post('/register', deliverRegister);
 router.post('/login', rateLimiter, deliverLogin);

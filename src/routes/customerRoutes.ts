@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import { authenticate, rateLimiter } from '../middleware';
 import {
   addToCart,
@@ -17,7 +17,7 @@ import {
   verifyOffer
 } from '../controllers/customerController';
 
-const router = express.Router();
+const router = Router();
 
 router.post('/register', customerRegister);
 router.post('/login', rateLimiter, customerLogin);

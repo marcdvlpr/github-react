@@ -3,16 +3,16 @@ import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Customer, Food, Offer, Order, Transaction } from '../models';
 import { CustomerRegisterInput, CustomerLoginInput } from '../validators/customer';
-import { IEditCustomerProfileInput, ICartItem, IOrderInput } from '../interfaces';
 import {
   generatePasswordHash,
   validatePassword,
   generateOtp,
   requestOtp,
-  generateToken
-} from '../helpers/auth';
-import { validateTransaction } from '../helpers/transaction';
-import { assignOrderForDeliver } from '../helpers/deliver';
+  generateToken,
+  validateTransaction,
+  assignOrderForDeliver
+} from '../helpers';
+import { IEditCustomerProfileInput, ICartItem, IOrderInput } from '../interfaces';
 
 export const customerRegister = async (req: Request, res: Response) => {
   try {

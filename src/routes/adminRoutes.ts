@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import {
   createMerchant,
   getMerchants,
@@ -9,7 +9,7 @@ import {
   getDelivers
 } from '../controllers/adminController';
 
-const router = express.Router();
+const router = Router();
 
 router.post('/merchant', createMerchant);
 router.get('/merchants', getMerchants);

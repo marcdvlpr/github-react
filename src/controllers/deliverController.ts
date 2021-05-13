@@ -7,7 +7,7 @@ import {
   DeliverLoginInput,
   EditDeliverProfileInput
 } from '../validators/deliver';
-import { generatePasswordHash, generateToken, validatePassword } from '../helpers/auth';
+import { generatePasswordHash, generateToken, validatePassword } from '../helpers';
 
 export const deliverRegister = async (req: Request, res: Response) => {
   try {
