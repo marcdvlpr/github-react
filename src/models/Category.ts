@@ -1,14 +1,14 @@
 import { Schema, Document, model } from 'mongoose';
 
 interface ICategoryModel extends Document {
-  id: number;
+  categoryId: number;
   title: string;
   images: string[];
 }
 
 const categorySchema = new Schema(
   {
-    id: {
+    categoryId: {
       type: Number,
       required: true
     },
@@ -32,4 +32,4 @@ const categorySchema = new Schema(
   }
 );
 
-export const Category = model<ICategoryModel>('Offer', categorySchema);
+export const Category = model<ICategoryModel>('Category', categorySchema);

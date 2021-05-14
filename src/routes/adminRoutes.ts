@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { uploadImage } from '../middleware';
 import {
   createMerchant,
   getMerchants,
@@ -6,7 +7,8 @@ import {
   getTransactions,
   getTransactionById,
   verifyDeliver,
-  getDelivers
+  getDelivers,
+  createCategory
 } from '../controllers/adminController';
 
 const router = Router();
@@ -18,5 +20,6 @@ router.get('/transactions', getTransactions);
 router.get('/transaction/:id', getTransactionById);
 router.put('/deliver/verify', verifyDeliver);
 router.get('/delivers', getDelivers);
+router.post('/category', uploadImage.array('images', 10), createCategory);
 
 export default router;

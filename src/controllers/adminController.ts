@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Merchant, Transaction, Deliver } from '../models';
+import { Merchant, Transaction, Deliver, Category } from '../models';
 import { generatePasswordHash } from '../helpers';
 import { ICreateMerchantInput } from '../interfaces';
 
@@ -129,6 +129,30 @@ export const getDelivers = async (req: Request, res: Response) => {
     if (!delivers) return res.status(404).json({ message: 'Unable to get delivers!' });
 
     return res.status(200).json(delivers);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const createCategory = async (req: Request, res: Response) => {
+  try {
+    const { categoryId, title } = req.body;
+
+    const files = req.files as [Express.Multer.File];
+    const images = files?.map((file: Express.Multer.File) => {
+      return `${req.protocol}://${req.get('host')}/images/${file.filename}`;
+    });
+
+    const category = await Category.create({
+      categoryId,
+      title,
+      images
+    });
+
+    if (!category) return res.status(400).json({ message: 'Error while creating category' });
+
+    return res.status(201).json(category);
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');

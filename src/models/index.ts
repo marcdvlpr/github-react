@@ -1,3 +1,4 @@
+export * from './Category';
 export * from './Customer';
 export * from './Deliver';
 export * from './Food';
