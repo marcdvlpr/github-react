@@ -31,7 +31,7 @@ router.get('/orders', getOrders);
 router.get('/order/:id', getOrderDetails);
 router.put('/order/:id/process', processOrder);
 router.get('/offers', getOffers);
-router.post('/offer', addOffer);
+router.post('/offer', uploadImage.array('images', 10), addOffer);
 router.put('/offer/:id', editOffer);
 
 export default router;

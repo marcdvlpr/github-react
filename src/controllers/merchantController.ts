@@ -250,11 +250,17 @@ export const addOffer = async (req: Request, res: Response) => {
 
     if (!merchant) return res.status(404).json({ message: 'Merchant does not exist!' });
 
+    const files = req.files as Express.Multer.File[];
+    const images = files.map((file: Express.Multer.File) => {
+      return `${req.protocol}://${req.get('host')}/images/${file.filename}`;
+    });
+
     const offer = await Offer.create({
       merchants: [merchant],
       offerType,
       title,
       description,
+      images,
       minValue,
       offerAmount,
       startValidity,
