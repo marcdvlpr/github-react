@@ -26,7 +26,8 @@ export const getTopRestaurants = async (req: Request, res: Response) => {
     const restaurants = await Merchant
       .find({ postalCode, serviceAvailable: true })
       .sort([['rating', 'descending']])
-      .limit(10);
+      .limit(10)
+      .populate('foods');
 
     if (restaurants.length === 0) return res.status(404).json({ message: 'Data not found!' });
 
