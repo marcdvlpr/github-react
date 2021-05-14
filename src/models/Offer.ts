@@ -5,6 +5,7 @@ interface IOfferModel extends Document {
   merchants: any[];
   title: string;
   description: string;
+  images: string[];
   minValue: number;
   offerAmount: number;
   startValidity: Date;
@@ -33,6 +34,9 @@ const offerSchema = new Schema(
     },
     description: {
       type: String
+    },
+    images: {
+      type: [String]
     },
     minValue: {
       type: Number,
