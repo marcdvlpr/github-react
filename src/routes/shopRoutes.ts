@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import {
-  getFoodAvailability,
   getFoodsIn30Min,
   getOffers,
   getRestaurantById,
@@ -10,7 +9,6 @@ import {
 
 const router = Router();
 
-router.get('/:postalCode', getFoodAvailability);
 router.get('/top-restaurants/:postalCode', getTopRestaurants);
 router.get('/foods30min/:postalCode', getFoodsIn30Min);
 router.get('/search/:postalCode', foodSearch);

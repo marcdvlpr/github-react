@@ -1,24 +1,6 @@
 import { Request, Response } from 'express';
 import { Merchant, IFoodModel, Offer } from '../models';
 
-export const getFoodAvailability = async (req: Request, res: Response) => {
-  try {
-    const postalCode = req.params.postalCode;
-
-    const restaurants = await Merchant
-      .find({ postalCode, serviceAvailable: true })
-      .sort([['rating', 'descending']])
-      .populate('foods');
-
-    if (restaurants.length === 0) return res.status(404).json({ message: 'Data not found!' });
-
-    return res.status(200).json(restaurants);
-  } catch (error) {
-    if (error instanceof Error) console.error(error.message);
-    return res.status(500).send('Server Error');
-  }
-};
-
 export const getTopRestaurants = async (req: Request, res: Response) => {
   try {
     const postalCode = req.params.postalCode;
