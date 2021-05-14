@@ -237,6 +237,7 @@ export const addOffer = async (req: Request, res: Response) => {
       description,
       minValue,
       offerAmount,
+      offerPercentage,
       startValidity,
       endValidity,
       promoCode,
@@ -263,6 +264,7 @@ export const addOffer = async (req: Request, res: Response) => {
       images,
       minValue,
       offerAmount,
+      offerPercentage,
       startValidity,
       endValidity,
       promoCode,
@@ -319,6 +321,7 @@ export const editOffer = async (req: Request, res: Response) => {
       description,
       minValue,
       offerAmount,
+      offerPercentage,
       startValidity,
       endValidity,
       promoCode,
@@ -341,6 +344,7 @@ export const editOffer = async (req: Request, res: Response) => {
     currentOffer.description = description;
     currentOffer.minValue = minValue;
     currentOffer.offerAmount = offerAmount;
+    currentOffer.offerPercentage = offerPercentage;
     currentOffer.startValidity = startValidity;
     currentOffer.endValidity = endValidity;
     currentOffer.promoCode = promoCode;

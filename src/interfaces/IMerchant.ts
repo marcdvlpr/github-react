@@ -34,6 +34,7 @@ export interface ICreateOfferInput {
   description: string;
   minValue: number;
   offerAmount: number;
+  offerPercentage: number;
   startValidity: Date;
   endValidity: Date;
   promoCode: string;
