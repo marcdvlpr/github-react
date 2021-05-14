@@ -132,7 +132,9 @@ export const addFoodItem = async (req: Request, res: Response) => {
     if (!merchant) return res.status(400).json({ message: 'Unable to update merchant profile!'});
 
     const files = req.files as [Express.Multer.File];
-    const images = files.map((file: Express.Multer.File) => file.filename);
+    const images = files.map((file: Express.Multer.File) => {
+      return `${req.protocol}://${req.get('host')}/images/${file.filename}`;
+    });
 
     const foodItem = await Food.create({
       merchantId: merchant._id,
