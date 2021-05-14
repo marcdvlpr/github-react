@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Merchant, Transaction, Deliver, Category } from '../models';
 import { generatePasswordHash } from '../helpers';
-import { ICreateMerchantInput } from '../interfaces';
+import { ICreateMerchantInput, ICreateCategoryInput } from '../interfaces';
 
 export const createMerchant = async (req: Request, res: Response) => {
   try {
@@ -137,7 +137,7 @@ export const getDelivers = async (req: Request, res: Response) => {
 
 export const createCategory = async (req: Request, res: Response) => {
   try {
-    const { categoryId, title } = req.body;
+    const { categoryId, title }: ICreateCategoryInput = req.body;
 
     const files = req.files as [Express.Multer.File];
     const images = files?.map((file: Express.Multer.File) => {
