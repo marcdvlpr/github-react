@@ -8,6 +8,7 @@ interface IOfferModel extends Document {
   images: string[];
   minValue: number;
   offerAmount: number;
+  offerPercentage: number;
   startValidity: Date;
   endValidity: Date;
   promoCode: string;
@@ -43,6 +44,9 @@ const offerSchema = new Schema(
       required: true
     },
     offerAmount: {
+      type: Number
+    },
+    offerPercentage: {
       type: Number,
       required: true
     },
