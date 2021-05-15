@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Merchant, IFoodModel, Offer } from '../models';
+import { Merchant, IFoodModel, Offer, Category } from '../models';
 
 export const getTopRestaurants = async (req: Request, res: Response) => {
   try {
@@ -89,6 +89,19 @@ export const getOffers = async (req: Request, res: Response) => {
     if (!offers) return res.status(404).json({ message: 'Offers not found!' });
 
     return res.status(200).json(offers);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
+export const getCategories = async (req: Request, res: Response) => {
+  try {
+    const categories = await Category.find();
+
+    if (!categories) return res.status(404).json({ message: '' });
+
+    return res.status(200).json(categories);
   } catch (error) {
     if (error instanceof Error) console.error(error.message);
     return res.status(500).send('Server Error');
