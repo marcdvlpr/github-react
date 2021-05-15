@@ -99,7 +99,7 @@ export const getCategories = async (req: Request, res: Response) => {
   try {
     const categories = await Category.find();
 
-    if (!categories) return res.status(404).json({ message: '' });
+    if (!categories) return res.status(404).json({ message: 'Categories not found!' });
 
     return res.status(200).json(categories);
   } catch (error) {
