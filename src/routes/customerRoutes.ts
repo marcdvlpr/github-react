@@ -1,20 +1,21 @@
 import { Router } from 'express';
 import { authenticate, rateLimiter } from '../middleware';
 import {
-  addToCart,
-  createOrder,
-  createPayment,
-  customerLogin,
   customerRegister,
-  customerRequestOtp,
+  customerLogin,
   customerVerify,
-  deleteCart,
-  editCustomerProfile,
-  getCart,
+  customerRequestOtp,
   getCustomerProfile,
-  getOrderById,
+  editCustomerProfile,
+  createOrder,
   getOrders,
-  verifyOffer
+  getOrderById,
+  cancelOrder,
+  addToCart,
+  getCart,
+  deleteCart,
+  verifyOffer,
+  createPayment
 } from '../controllers/customerController';
 
 const router = Router();
@@ -30,6 +31,7 @@ router.patch('/profile', editCustomerProfile);
 router.post('/create-order', createOrder);
 router.get('/orders', getOrders);
 router.get('/order/:id', getOrderById);
+router.delete('/order/:id', cancelOrder);
 router.post('/cart', addToCart);
 router.get('/cart', getCart);
 router.delete('/cart', deleteCart);

@@ -289,6 +289,35 @@ export const getOrderById = async (req: Request, res: Response) => {
   }
 };
 
+export const cancelOrder = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const orderId = req.params.id;
+
+    const customer = await Customer.findById(user?._id).populate({
+      path: 'orders',
+      populate: { path: 'items.food' }
+    });
+
+    if (!customer) return res.status(404).json({ message: 'User does not exist!' });
+
+    const order = await Order.findById(orderId);
+
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    customer?.orders.map(item => {
+      if (String(item._id) === orderId) order.orderStatus = 'CANCELLED'
+    });
+
+    order.save();
+
+    return res.status(200).json(customer.orders);
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message);
+    return res.status(500).send('Server Error');
+  }
+};
+
 export const addToCart = async (req: Request, res: Response) => {
   try {
     const user = req.user;
