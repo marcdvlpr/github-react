@@ -231,7 +231,7 @@ export const createOrder = async (req: Request, res: Response) => {
         remarks: '',
         deliveryId: '',
         readyTime: 45
-      })
+      });
 
       customer.cart = [] as any;
       customer.orders.push(currentOrder);
@@ -258,7 +258,10 @@ export const getOrders = async (req: Request, res: Response) => {
   try {
     const user = req.user;
 
-    const customer = await Customer.findById(user?._id).populate('orders');
+    const customer = await Customer.findById(user?._id).populate({
+      path: 'orders',
+      populate: { path: 'items.food' }
+    });
 
     if (!customer || customer.orders.length <= 0) {
       return res.status(404).json({ message: 'Orders not found!' });
