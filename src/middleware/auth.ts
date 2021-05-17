@@ -9,6 +9,6 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
 
     return next();
   } catch (error) {
-    console.error(error);
+    if (error instanceof Error) console.error(error.message);
   }
 };

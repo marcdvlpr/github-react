@@ -6,6 +6,6 @@ export const createDirectory = (directory: string) => {
 
     return true;
   } catch (error) {
-    console.error(error);
+    if (error instanceof Error) console.error(error.message);
   }
 };

@@ -13,6 +13,7 @@ import {
   assignOrderForDeliver
 } from '../helpers';
 import { IEditCustomerProfileInput, ICartItem, IOrderInput } from '../interfaces';
+import { Constants } from '../constants';
 
 export const customerRegister = async (req: Request, res: Response) => {
   try {
@@ -227,7 +228,7 @@ export const createOrder = async (req: Request, res: Response) => {
         totalAmount: netAmount,
         paidAmount: amount,
         orderDate: new Date(),
-        orderStatus: 'Waiting',
+        orderStatus: Constants.WAITING,
         remarks: '',
         deliveryId: '',
         readyTime: 45
@@ -238,7 +239,7 @@ export const createOrder = async (req: Request, res: Response) => {
 
       transaction.merchantId = merchantId;
       transaction.orderId = orderId;
-      transaction.status = 'CONFIRMED';
+      transaction.status = Constants.CONFIRMED;
 
       await transaction.save();
 
@@ -306,7 +307,7 @@ export const cancelOrder = async (req: Request, res: Response) => {
     if (!order) return res.status(404).json({ message: 'Order not found' });
 
     customer?.orders.map(item => {
-      if (String(item._id) === orderId) order.orderStatus = 'CANCELLED'
+      if (String(item._id) === orderId) order.orderStatus = Constants.CANCELLED;
     });
 
     order.save();
@@ -432,7 +433,7 @@ export const createPayment = async (req: Request, res: Response) => {
       orderId: '',
       orderValue: payableAmount,
       offerUsed: offerId || 'NA',
-      status: 'OPEN',
+      status: Constants.OPEN,
       paymentMode,
       paymentResponse: 'Payment is cash on delivery'
     });

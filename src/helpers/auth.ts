@@ -68,6 +68,6 @@ export const requestOtp = async (otp: number, phoneNumber: string) => {
       return response;
     }
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) console.error(error.message);
   }
 };

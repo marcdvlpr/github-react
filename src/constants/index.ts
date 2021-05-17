@@ -1,0 +1,7 @@
+export enum Constants {
+  CANCELLED = 'CANCELLED',
+  CONFIRMED = 'CONFIRMED',
+  FAILED = 'FAILED',
+  OPEN = 'OPEN',
+  WAITING = 'WAITING',
+}
