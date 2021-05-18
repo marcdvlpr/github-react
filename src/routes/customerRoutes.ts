@@ -31,7 +31,7 @@ router.patch('/profile', editCustomerProfile);
 router.post('/create-order', createOrder);
 router.get('/orders', getOrders);
 router.get('/order/:id', getOrderById);
-router.delete('/order/:id', cancelOrder);
+router.patch('/order/:id', cancelOrder);
 router.post('/cart', addToCart);
 router.get('/cart', getCart);
 router.delete('/cart', deleteCart);
