@@ -4,8 +4,6 @@ import { DB } from './environment';
 export const connectDB = async () => {
   const options = {
     useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
     useUnifiedTopology: true
   };
 
