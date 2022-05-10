@@ -1,5 +1,7 @@
 <h1 align="center">Food Delivery Server</h1>
 
+Food Delivery Server is the backend for the [Food Delivery App](https://github.com/mdossantosdev/food-delivery-app) (React Native mobile app).
+
 ## 🛠️ Built With
 
 - TypeScript
