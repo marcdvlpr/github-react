@@ -3,6 +3,7 @@ import { DB } from './environment';
 
 export const connectDB = async () => {
   const options = {
+    autoIndex: false,
     useNewUrlParser: true,
     useUnifiedTopology: true
   };
